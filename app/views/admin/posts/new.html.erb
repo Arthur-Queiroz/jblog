@@ -1,0 +1,7 @@
+<% content_for(:title, "Novo post") %>
+
+<h1>Novo post</h1>
+
+<%= render "form", post: @post %>
+
+<%= link_to "← Voltar", admin_posts_path, class: "back-link" %>

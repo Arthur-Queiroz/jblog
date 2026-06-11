@@ -1,0 +1,27 @@
+<% content_for(:title, "Recuperar senha") %>
+
+<div class="auth-card">
+  <div class="auth-card__header">
+    <h1 class="auth-card__title">Recuperar senha</h1>
+    <p class="auth-card__subtitle">Informe seu e-mail para receber as instruções</p>
+  </div>
+
+  <% if flash[:alert] %>
+    <div class="flash flash--alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <%= form_with url: passwords_path, class: "auth-form" do |form| %>
+    <div class="form__group">
+      <%= form.label :email_address, "E-mail", class: "form__label" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "seu@email.com", value: params[:email_address], class: "form__input" %>
+    </div>
+
+    <div class="form__group">
+      <%= form.submit "Enviar instruções", class: "btn btn--primary btn--full" %>
+    </div>
+  <% end %>
+
+  <div class="auth-card__footer">
+    <%= link_to "Voltar ao login", new_session_path, class: "auth-card__link" %>
+  </div>
+</div>

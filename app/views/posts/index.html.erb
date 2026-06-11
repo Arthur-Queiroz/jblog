@@ -1,0 +1,20 @@
+<% content_for(:title, "jblog") %>
+
+<% if @posts.empty? %>
+  <div class="empty-state">
+    <p>Nenhum post publicado ainda.</p>
+  </div>
+<% else %>
+  <ul class="post-list">
+    <% @posts.each do |post| %>
+      <li class="post-list__item">
+        <h2 class="post-list__title">
+          <%= link_to post.title, post_path(post) %>
+        </h2>
+        <time class="post-list__date" datetime="<%= post.published_at&.iso8601 %>">
+          <%= post.published_at&.strftime("%d de %B de %Y") %>
+        </time>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

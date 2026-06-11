@@ -1,0 +1,14 @@
+published_post:
+  title: "Post publicado"
+  slug: "post-publicado"
+  body_markdown: "Conteúdo do post **publicado**."
+  body_html: "<p>Conteúdo do post <strong>publicado</strong>.</p>"
+  published: true
+  published_at: <%= 1.day.ago.to_fs(:db) %>
+
+draft_post:
+  title: "Rascunho"
+  slug: "rascunho"
+  body_markdown: "Conteúdo do rascunho."
+  body_html: "<p>Conteúdo do rascunho.</p>"
+  published: false

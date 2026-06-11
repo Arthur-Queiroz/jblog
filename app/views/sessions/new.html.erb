@@ -1,0 +1,35 @@
+<% content_for(:title, "Entrar") %>
+
+<div class="auth-card">
+  <div class="auth-card__header">
+    <h1 class="auth-card__title">Entrar</h1>
+    <p class="auth-card__subtitle">Acesse o painel administrativo</p>
+  </div>
+
+  <% if flash[:alert] %>
+    <div class="flash flash--alert"><%= flash[:alert] %></div>
+  <% end %>
+  <% if flash[:notice] %>
+    <div class="flash flash--notice"><%= flash[:notice] %></div>
+  <% end %>
+
+  <%= form_with url: session_path, class: "auth-form" do |form| %>
+    <div class="form__group">
+      <%= form.label :email_address, "E-mail", class: "form__label" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "seu@email.com", value: params[:email_address], class: "form__input" %>
+    </div>
+
+    <div class="form__group">
+      <%= form.label :password, "Senha", class: "form__label" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Sua senha", maxlength: 72, class: "form__input" %>
+    </div>
+
+    <div class="form__group">
+      <%= form.submit "Entrar", class: "btn btn--primary btn--full" %>
+    </div>
+  <% end %>
+
+  <div class="auth-card__footer">
+    <%= link_to "Esqueceu a senha?", new_password_path, class: "auth-card__link" %>
+  </div>
+</div>

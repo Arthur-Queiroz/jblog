@@ -1,0 +1,32 @@
+<% content_for(:title, "Redefinir senha") %>
+
+<div class="auth-card">
+  <div class="auth-card__header">
+    <h1 class="auth-card__title">Redefinir senha</h1>
+    <p class="auth-card__subtitle">Escolha uma nova senha para sua conta</p>
+  </div>
+
+  <% if flash[:alert] %>
+    <div class="flash flash--alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <%= form_with url: password_path(params[:token]), method: :put, class: "auth-form" do |form| %>
+    <div class="form__group">
+      <%= form.label :password, "Nova senha", class: "form__label" %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Nova senha", maxlength: 72, class: "form__input" %>
+    </div>
+
+    <div class="form__group">
+      <%= form.label :password_confirmation, "Confirmar senha", class: "form__label" %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repita a nova senha", maxlength: 72, class: "form__input" %>
+    </div>
+
+    <div class="form__group">
+      <%= form.submit "Salvar nova senha", class: "btn btn--primary btn--full" %>
+    </div>
+  <% end %>
+
+  <div class="auth-card__footer">
+    <%= link_to "Voltar ao login", new_session_path, class: "auth-card__link" %>
+  </div>
+</div>
