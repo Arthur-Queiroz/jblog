@@ -26,8 +26,8 @@
         <td><%= post.created_at.strftime("%d/%m/%Y %H:%M") %></td>
         <td>
           <div class="admin-table__actions">
-            <%= link_to "Editar", edit_admin_post_path(post), class: "btn btn--secondary" %>
-            <%= button_to "Remover", admin_post_path(post), method: :delete, data: { turbo_confirm: "Tem certeza?" }, class: "btn btn--danger" %>
+            <%= link_to "Editar", edit_admin_post_path(post), class: "btn btn--sm btn--secondary" %>
+            <%= button_to "Remover", admin_post_path(post), method: :delete, data: { turbo_confirm: "Tem certeza?" }, class: "btn btn--sm btn--danger" %>
           </div>
         </td>
       </tr>
