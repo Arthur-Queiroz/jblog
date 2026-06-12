@@ -24,7 +24,7 @@
   <div class="form__group">
     <%= form.label :body_markdown, "Conteúdo (Markdown)", class: "form__label" %>
     <%= form.text_area :body_markdown, rows: 20, class: "form__textarea", data: { preview_target: "input" } %>
-    <button type="button" class="btn btn--secondary" data-action="click->preview#preview" style="margin-top: var(--space-sm);">
+    <button type="button" class="btn btn--secondary form__preview-button" data-action="click->preview#preview">
       Preview
     </button>
     <div class="preview-pane hidden" data-preview-target="output"></div>

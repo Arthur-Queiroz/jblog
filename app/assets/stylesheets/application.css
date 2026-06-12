@@ -537,6 +537,10 @@ li {
   margin-top: var(--space-xs);
 }
 
+.form__preview-button {
+  margin-top: var(--space-sm);
+}
+
 .form__checkbox-group {
   display: flex;
   align-items: center;

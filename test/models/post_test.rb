@@ -57,4 +57,10 @@ class PostTest < ActiveSupport::TestCase
     post = posts(:published_post)
     assert_equal "post-publicado", post.to_param
   end
+
+  test "body_html is sanitized on save" do
+    post = Post.create!(title: "Malicioso", body_markdown: %(texto <img src="x" onerror="alert(1)"> <script>alert(2)</script>))
+    assert_not_includes post.body_html, "onerror"
+    assert_not_includes post.body_html, "<script"
+  end
 end
