@@ -1,0 +1,29 @@
+name: DIAG - Conexão VPS
+
+# Workflow temporário só para diagnosticar se um runner do GitHub alcança a VPS.
+# Roda nesta branch quando empurramos. Será removido depois.
+on:
+  push:
+    branches: [ ci/github-actions-deploy ]
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: IP público do runner
+        run: curl -s --max-time 10 https://api.ipify.org; echo
+
+      - name: Testa TCP na porta 22 da VPS
+        run: |
+          echo "== nc -zv -w 5 2.25.158.85 22 =="
+          nc -zv -w 5 2.25.158.85 22 || echo "FALHOU (rc=$?)"
+
+      - name: Testa TCP na porta 443 da VPS (Cloudflare/edge)
+        run: |
+          echo "== nc -zv -w 5 2.25.158.85 443 =="
+          nc -zv -w 5 2.25.158.85 443 || echo "FALHOU (rc=$?)"
+
+      - name: ssh-keyscan (não fatal)
+        run: |
+          echo "== ssh-keyscan =="
+          ssh-keyscan -T 8 2.25.158.85 || echo "keyscan FALHOU (rc=$?)"
