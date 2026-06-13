@@ -152,10 +152,28 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Confia no host da VPS
+      - name: Instala o cloudflared
         run: |
+          curl -fsSL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
+            -o "$RUNNER_TEMP/cloudflared"
+          sudo install -m 0755 "$RUNNER_TEMP/cloudflared" /usr/local/bin/cloudflared
+          cloudflared --version
+
+      - name: Roteia o SSH da VPS pelo Cloudflare Tunnel
+        run: |
+          # O IP da VPS não é alcançável de forma confiável a partir dos runners do GitHub
+          # (a Hostinger descarta algumas faixas de datacenter). Em vez de SSH direto,
+          # o net-ssh do Kamal conecta via ProxyCommand -> cloudflared access ssh ->
+          # túnel Cloudflare -> sshd local da VPS. Não há porta aberta; a autenticação
+          # é por chave SSH (o sshd da VPS está endurecido: só pubkey, sem senha).
           mkdir -p ~/.ssh
-          ssh-keyscan -H 2.25.158.85 >> ~/.ssh/known_hosts
+          cat >> ~/.ssh/config <<'EOF'
+          Host 2.25.158.85
+            HostName 2.25.158.85
+            User root
+            ProxyCommand cloudflared access ssh --hostname ssh.devarthur.com.br
+            StrictHostKeyChecking accept-new
+          EOF
 
       - name: Deploy com Kamal
         run: bin/kamal deploy
