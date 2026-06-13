@@ -175,5 +175,13 @@ jobs:
             StrictHostKeyChecking accept-new
           EOF
 
+      - name: Recria config/master.key a partir do secret
+        run: |
+          # O .kamal/secrets lê a master key de config/master.key (que é gitignored e
+          # não vem no checkout). printf '%s' grava os 32 hex SEM newline — qualquer
+          # whitespace extra faria o Rails estourar "key must be 16 bytes" no boot.
+          printf '%s' "$RAILS_MASTER_KEY" > config/master.key
+          test "$(wc -c < config/master.key)" -eq 32 || { echo "master.key com tamanho inesperado"; exit 1; }
+
       - name: Deploy com Kamal
         run: bin/kamal deploy
