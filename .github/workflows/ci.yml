@@ -134,11 +134,6 @@ jobs:
       # Segredos que o Kamal injeta no container (ver config/deploy.yml e .kamal/secrets).
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       JBLOG_DATABASE_PASSWORD: ${{ secrets.JBLOG_DATABASE_PASSWORD }}
-      # Service token do Cloudflare Access. Ficam no env do JOB (não só de um step)
-      # porque quem invoca o ProxyCommand é o net-ssh do Kamal, lá no passo de deploy.
-      # O cloudflared lê estes dois nomes de variável automaticamente.
-      TUNNEL_SERVICE_TOKEN_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
-      TUNNEL_SERVICE_TOKEN_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
 
     steps:
       - uses: actions/checkout@v4
@@ -169,8 +164,8 @@ jobs:
           # O IP da VPS não é alcançável de forma confiável a partir dos runners do GitHub
           # (a Hostinger descarta algumas faixas de datacenter). Em vez de SSH direto,
           # o net-ssh do Kamal conecta via ProxyCommand -> cloudflared access ssh ->
-          # túnel Cloudflare -> sshd local da VPS. A autenticação de transporte é o
-          # service token (env TUNNEL_SERVICE_TOKEN_*); a do SSH continua sendo a chave.
+          # túnel Cloudflare -> sshd local da VPS. Não há porta aberta; a autenticação
+          # é por chave SSH (o sshd da VPS está endurecido: só pubkey, sem senha).
           mkdir -p ~/.ssh
           cat >> ~/.ssh/config <<'EOF'
           Host 2.25.158.85
