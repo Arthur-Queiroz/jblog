@@ -1,0 +1,26 @@
+name: DIAG - master key
+
+on:
+  push:
+    branches: [ ci/github-actions-deploy ]
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+    steps:
+      - name: Tamanho e formato do secret (sem revelar valor)
+        run: |
+          len=${#RAILS_MASTER_KEY}
+          echo "RAILS_MASTER_KEY length = $len"
+          if [ "$len" -eq 32 ]; then echo "tamanho OK (32)"; else echo "TAMANHO ERRADO: $len"; fi
+          # checa se é 32 hex (imprime só sim/não)
+          if printf '%s' "$RAILS_MASTER_KEY" | grep -qE '^[0-9a-f]{32}$'; then
+            echo "formato: 32 hex OK"
+          else
+            echo "formato: NAO eh 32 hex"
+            # mostra só os char codes do começo/fim p/ achar lixo invisível, sem revelar a chave
+            echo "primeiro/último byte (od):"
+            printf '%s' "$RAILS_MASTER_KEY" | od -An -c | head -1
+          fi
