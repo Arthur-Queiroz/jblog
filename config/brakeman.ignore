@@ -1,0 +1,15 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "0723fd5f828dbd5ade2d27318bcfbc5c4fc73d8ad5868de8efd481209b25f56f",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/posts/show.html.erb",
+      "line": 12,
+      "note": "body_html é renderizado e sanitizado no write pelo MarkdownRenderer (SafeListSanitizer); a view serve HTML pronto por arquitetura. Coberto por testes de XSS em test/services/markdown_renderer_test.rb e test/models/post_test.rb."
+    }
+  ],
+  "brakeman_version": "8.0.4"
+}

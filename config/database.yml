@@ -90,6 +90,9 @@ production:
     database: jblog_production
     username: jblog
     password: <%= ENV["JBLOG_DATABASE_PASSWORD"] %>
+    # Postgres roda como accessory (container jblog-db) na rede do kamal, acessível por TCP.
+    # Sem isto o Rails tentaria o socket local, que não existe no container.
+    host: <%= ENV["DB_HOST"] %>
   cache:
     <<: *primary_production
     database: jblog_production_cache

@@ -2,16 +2,13 @@
 service: jblog
 
 # Name of the container image (use your-user/app-name on external registries).
-image: jblog
+# Minúsculo: o ghcr.io exige o caminho da imagem em lowercase.
+image: arthur-queiroz/jblog
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
-  # job:
-  #   hosts:
-  #     - 192.168.0.1
-  #   cmd: bin/jobs
+    - 2.25.158.85
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
@@ -20,43 +17,41 @@ servers:
 #
 # Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
 #
-# proxy:
-#   ssl: true
-#   host: app.example.com
+# O TLS termina no Cloudflare; o kamal-proxy só fala HTTP no loopback (ver proxy boot_config).
+# Roteia apenas requisições com este Host, vindas do Cloudflare Tunnel.
+proxy:
+  ssl: false
+  host: jblog.devarthur.com.br
+  app_port: 80
+  # Liga o kamal-proxy só no loopback. O cloudflared alcança a 8082 (HTTP); o TLS termina
+  # no Cloudflare, então a porta HTTPS do proxy não é usada — mapeada para uma porta
+  # loopback livre (8443) só para não colidir com o caddy que já ocupa a 443 na VPS.
+  run:
+    http_port: 8082
+    https_port: 8443
+    bind_ips:
+      - 127.0.0.1
 
 # Where you keep your container images.
 registry:
-  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
-
-  # Needed for authenticated registries.
-  # username: your-user
-
-  # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
+  server: ghcr.io
+  username: Arthur-Queiroz
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
     - RAILS_MASTER_KEY
+    - JBLOG_DATABASE_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
 
-    # Set number of processes dedicated to Solid Queue (default: 1)
-    # JOB_CONCURRENCY: 3
-
-    # Set number of cores available to the application on each server (default: 1).
-    # WEB_CONCURRENCY: 2
-
-    # Match this to any external database server to configure Active Record correctly
-    # Use jblog-db for a db accessory server on same machine via local kamal docker network.
-    # DB_HOST: 192.168.0.2
-
-    # Log everything from Rails
-    # RAILS_LOG_LEVEL: debug
+    # Postgres roda como accessory na mesma máquina; alcançável pelo nome do container
+    # na rede docker do kamal.
+    DB_HOST: jblog-db
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
@@ -94,26 +89,20 @@ builder:
 # ssh:
 #   user: app
 
-# Use accessory services (secrets come from .kamal/secrets).
-# accessories:
-#   db:
-#     image: mysql:8.0
-#     host: 192.168.0.2
-#     # Change to 3306 to expose port to the world instead of just local network.
-#     port: "127.0.0.1:3306:3306"
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: valkey/valkey:8
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data
+# Postgres dedicado, gerenciado pelo Kamal. A senha (POSTGRES_PASSWORD) deve ser a mesma
+# que o app usa (JBLOG_DATABASE_PASSWORD) — ver .kamal/secrets.
+accessories:
+  db:
+    image: postgres:16
+    host: 2.25.158.85
+    # Sem mapeamento de porta no host: o app alcança o banco pelo nome do container
+    # (jblog-db) na rede docker do kamal. Evita colisão com o postgres compartilhado
+    # que já ocupa a 5432 na VPS, e não expõe o banco.
+    env:
+      clear:
+        POSTGRES_USER: jblog
+        POSTGRES_DB: jblog_production
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data

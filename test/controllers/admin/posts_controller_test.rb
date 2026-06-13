@@ -63,4 +63,16 @@ class Admin::PostsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to admin_posts_path
   end
+
+  test "preview renders markdown as html" do
+    post preview_admin_posts_path, params: { body_markdown: "**negrito**" }
+    assert_response :success
+    assert_includes response.body, "<strong>negrito</strong>"
+  end
+
+  test "preview sanitizes malicious markdown" do
+    post preview_admin_posts_path, params: { body_markdown: '<img src="x" onerror="alert(1)">' }
+    assert_response :success
+    assert_not_includes response.body, "onerror"
+  end
 end

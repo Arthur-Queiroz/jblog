@@ -24,4 +24,16 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h3", count: 0
   end
+
+  test "search handles hostile input safely" do
+    get search_path, params: { q: "'; DROP TABLE posts; --" }
+    assert_response :success
+    assert Post.count.positive?
+  end
+
+  test "search query is escaped in the results page" do
+    get search_path, params: { q: "<script>alert(1)</script>" }
+    assert_response :success
+    assert_not_includes response.body, "<script>alert(1)</script>"
+  end
 end
