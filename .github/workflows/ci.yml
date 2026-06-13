@@ -1,0 +1,161 @@
+name: CI & Deploy
+
+# Roda em todo PR (para ver build + testes antes do merge) e em todo push na main.
+# O deploy só acontece no push para a main, e só depois que todos os checks passam.
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  scan_ruby:
+    name: Security - Brakeman
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Análise estática de segurança (Brakeman)
+        run: bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error
+
+  scan_js:
+    name: Security - Importmap audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Auditoria de dependências JavaScript (importmap)
+        run: bin/importmap audit
+
+  audit_gems:
+    name: Security - Gem audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Auditoria de gems com falhas conhecidas (bundler-audit)
+        run: bin/bundler-audit
+
+  lint:
+    name: Lint - RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Estilo de código (RuboCop)
+        run: bin/rubocop -f github
+
+  test:
+    name: Tests - Rails
+    runs-on: ubuntu-latest
+
+    # Postgres real para a suíte: a busca full-text usa pg_trgm, que precisa de um
+    # Postgres de verdade (não dá pra simular com SQLite).
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      RAILS_ENV: test
+      # Aponta o Rails para o Postgres do service. O nome do banco (jblog_test) continua
+      # vindo do database.yml; a URL só fornece host/usuário/senha/porta.
+      DATABASE_URL: "postgres://postgres:postgres@localhost:5432"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Prepara o banco de teste (carrega schema + extensões)
+        run: bin/rails db:test:prepare
+
+      - name: Testes
+        run: bin/rails test
+
+      - name: Verifica os seeds (db:seed:replant)
+        run: bin/rails db:seed:replant
+
+  deploy:
+    name: Deploy - Kamal
+    runs-on: ubuntu-latest
+
+    # Só depois que tudo passou.
+    needs: [ scan_ruby, scan_js, audit_gems, lint, test ]
+
+    # E só no push para a main (em PRs este job é ignorado).
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # Necessário para o GITHUB_TOKEN conseguir publicar a imagem no ghcr.io.
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      # Login no registry (ghcr.io). O GITHUB_TOKEN da Action tem permissão de publicar
+      # pacotes do próprio repositório — dispensa um PAT separado.
+      KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      # Segredos que o Kamal injeta no container (ver config/deploy.yml e .kamal/secrets).
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      JBLOG_DATABASE_PASSWORD: ${{ secrets.JBLOG_DATABASE_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Carrega a chave SSH da VPS
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Confia no host da VPS
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 2.25.158.85 >> ~/.ssh/known_hosts
+
+      - name: Deploy com Kamal
+        run: bin/kamal deploy
