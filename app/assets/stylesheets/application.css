@@ -352,9 +352,13 @@ body {
   gap: var(--space-md);
 }
 
-/* Cada card carrega data-theme, então os --color-*/--hl-* DENTRO dele resolvem para
-   o tema do card — o preview é o tema de verdade, não uma imitação. */
+/* Cada card carrega data-theme, então as variáveis de cor (--color e --hl) DENTRO
+   dele resolvem para o tema do card — preview de verdade, não imitação. */
 .theme-card {
+  /* Sem isto o <button> usa a aparência nativa (appearance: auto) e IGNORA o
+     background-color — todos os cards saíam com o cinza nativo do controle. */
+  appearance: none;
+  -webkit-appearance: none;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
