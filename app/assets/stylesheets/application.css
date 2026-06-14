@@ -401,13 +401,6 @@ body {
   min-height: 2.25rem;
 }
 
-.theme-card__preview--system {
-  justify-content: center;
-  text-align: center;
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-}
-
 /* Bolinhas com cores-chave da paleta. Resolvem via data-theme do card, então cada
    card mostra as cores reais do seu tema. */
 .theme-card__swatches {
@@ -422,8 +415,8 @@ body {
 }
 
 .theme-card__dot--keyword { background-color: var(--hl-keyword); }
-.theme-card__dot--string { background-color: var(--hl-string); }
 .theme-card__dot--type { background-color: var(--hl-type); }
+.theme-card__dot--constant { background-color: var(--hl-constant); }
 
 .theme-card__name {
   display: flex;

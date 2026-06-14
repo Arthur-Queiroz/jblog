@@ -8,19 +8,13 @@
         data-action="click->theme#select"
         data-theme-target="card"
         aria-pressed="false">
-  <% if theme[:id] == "system" %>
-    <span class="theme-card__preview theme-card__preview--system">
-      Segue o tema do dispositivo
+  <span class="theme-card__preview">
+    <span class="theme-card__swatches">
+      <span class="theme-card__dot theme-card__dot--keyword"></span>
+      <span class="theme-card__dot theme-card__dot--type"></span>
+      <span class="theme-card__dot theme-card__dot--constant"></span>
     </span>
-  <% else %>
-    <span class="theme-card__preview">
-      <span class="theme-card__swatches">
-        <span class="theme-card__dot theme-card__dot--keyword"></span>
-        <span class="theme-card__dot theme-card__dot--string"></span>
-        <span class="theme-card__dot theme-card__dot--type"></span>
-      </span>
-    </span>
-  <% end %>
+  </span>
   <span class="theme-card__name">
     <%= theme[:name] %>
     <span class="theme-card__check" aria-hidden="true">✓</span>
