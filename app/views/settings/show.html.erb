@@ -1,0 +1,18 @@
+<% content_for :title, "Configurações" %>
+
+<div class="settings">
+  <h1>Configurações</h1>
+
+  <%# data-controller="theme": cada card aplica seu tema ao clicar; o controller
+      também marca o card ativo conforme o tema atual. %>
+  <section class="settings__section" data-controller="theme">
+    <h2 class="settings__section-title">Tema</h2>
+    <p class="settings__hint">
+      A prévia mostra como o site fica em cada tema, incluindo as cores do código.
+    </p>
+
+    <div class="theme-grid">
+      <%= render partial: "settings/theme_card", collection: @themes, as: :theme %>
+    </div>
+  </section>
+</div>

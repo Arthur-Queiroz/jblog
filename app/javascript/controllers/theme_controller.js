@@ -1,19 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Aplica o tema escolhido no <html> e persiste no localStorage. O próprio <select>
-// é o elemento do controller. Sem escolha salva ("Sistema"), removemos o data-theme
-// e o site volta a seguir o SO (o :root usa light-dark()).
+// Tela de configurações: cada card aplica seu tema ao clicar e o controller marca
+// qual está ativo. A persistência é no localStorage; o script inline do layout
+// reaplica o tema salvo antes do primeiro paint (evita flash).
 //
-// Adicionar um tema é só: novo bloco [data-theme] no CSS + nova <option> no layout.
-// Nada muda aqui — o controller só lê o value do select.
+// "system" = sem tema forçado: removemos o data-theme e o site volta a seguir o SO.
 export default class extends Controller {
+  static targets = ["card"]
+
   connect() {
-    // Reflete no select o tema atualmente forçado (ou "Sistema" quando não há).
-    this.element.value = document.documentElement.dataset.theme || "system"
+    this.markActive()
   }
 
-  apply() {
-    const theme = this.element.value
+  select(event) {
+    const theme = event.currentTarget.dataset.theme
     if (theme === "system") {
       delete document.documentElement.dataset.theme
       localStorage.removeItem("theme")
@@ -21,5 +21,15 @@ export default class extends Controller {
       document.documentElement.dataset.theme = theme
       localStorage.setItem("theme", theme)
     }
+    this.markActive()
+  }
+
+  markActive() {
+    const current = document.documentElement.dataset.theme || "system"
+    this.cardTargets.forEach((card) => {
+      const active = card.dataset.theme === current
+      card.classList.toggle("theme-card--active", active)
+      card.setAttribute("aria-pressed", active)
+    })
   }
 }
