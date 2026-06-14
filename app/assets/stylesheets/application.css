@@ -46,9 +46,9 @@
 /* ============================================================================
    TEMAS
 
-   - claro/escuro: vêm do :root via light-dark(); sem [data-theme] o site segue o
-     SO. As duas linhas abaixo só FORÇAM um dos dois quando o usuário escolhe.
-   - paletas fixas (catppuccin/gruvbox/kanagawa): cada bloco [data-theme] reescreve
+   - claro/blue: vêm do :root via light-dark() (blue = o lado escuro, navy). Sem
+     [data-theme] o site segue o SO; as duas linhas abaixo só FORÇAM um dos dois.
+   - paletas fixas (preto/catppuccin/gruvbox/kanagawa): cada bloco [data-theme] reescreve
      os tokens --color-*. O resto do CSS usa só esses tokens, então herda de graça.
 
    Para ADICIONAR um tema:
@@ -58,8 +58,31 @@
      3. adicione uma <option> no <select> de tema (app/views/layouts/application.html.erb).
    Os tons *-bg/*-border/header-bg são derivados com color-mix() para não repetir cor.
    ============================================================================ */
-[data-theme="light"] { color-scheme: light; }
-[data-theme="dark"] { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }   /* lado claro do :root */
+[data-theme="blue"] { color-scheme: dark; }      /* "blue" = lado escuro (navy) do :root */
+
+/* Preto (OLED) — o "dark de verdade", fundo #000 */
+[data-theme="black"] {
+  color-scheme: dark;
+  --color-bg: #000000;
+  --color-surface: #0d0d0d;
+  --color-text: #ededed;
+  --color-text-muted: #8a8a8a;
+  --color-border: #262626;
+  --color-link: #60a5fa;
+  --color-link-hover: #93c5fd;
+  --color-code-bg: #0a0a0a;
+  --color-code-text: #f87171;
+  --color-accent: #3b82f6;
+  --color-success: #34d399;
+  --color-danger: #ef4444;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.5);
+  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
+  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
+  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
+  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
+  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+}
 
 /* Catppuccin (Mocha) */
 [data-theme="catppuccin"] {
@@ -231,7 +254,7 @@ body {
 .theme-select {
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   background-color: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
