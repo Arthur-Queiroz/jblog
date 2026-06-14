@@ -5,7 +5,6 @@ class SettingsController < ApplicationController
   # Esta tela só lista os temas disponíveis para o preview e a seleção. A ordem aqui
   # é a ordem do grid. Para um tema novo: bloco [data-theme] no CSS + entrada aqui.
   THEMES = [
-    { id: "system",     name: "Sistema" },
     { id: "light",      name: "Claro" },
     { id: "blue",       name: "Blue" },
     { id: "black",      name: "Preto" },
