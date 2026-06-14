@@ -40,17 +40,13 @@
           <% else %>
             <%= link_to "Entrar", new_session_path %>
           <% end %>
-          <%# Seletor de tema. "Sistema" = seguir o SO; as paletas estão no CSS como
-              blocos [data-theme]. Para adicionar uma, é só mais uma <option> aqui. %>
-          <select class="theme-select" data-controller="theme" data-action="change->theme#apply" aria-label="Tema">
-            <option value="system">Sistema</option>
-            <option value="light">Claro</option>
-            <option value="blue">Blue</option>
-            <option value="black">Preto</option>
-            <option value="catppuccin">Catppuccin</option>
-            <option value="gruvbox">Gruvbox</option>
-            <option value="kanagawa">Kanagawa</option>
-          </select>
+          <%# Engrenagem → tela de configurações (escolha de tema com preview). %>
+          <%= link_to settings_path, class: "settings-link", aria: { label: "Configurações" } do %>
+            <svg class="settings-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          <% end %>
         </nav>
       </div>
     </header>

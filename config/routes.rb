@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   get "search", to: "search#index", as: :search
 
+  get "settings", to: "settings#show", as: :settings
+
   namespace :admin do
     resources :posts, param: :slug do
       collection do

@@ -27,6 +27,21 @@
   --shadow-card: light-dark(0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.2)),
                  light-dark(0 4px 12px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.15));
 
+  /* Cores do syntax highlight, por PAPEL (não por classe do rouge). Cada tema
+     redefine estas — é o que dá a "variedade" de uma paleta (keyword, string,
+     função, tipo... com cores próprias), como num colorscheme de editor.
+     Aqui no :root usam light-dark() (GitHub claro/escuro), cobrindo claro/blue. */
+  --hl-comment: light-dark(#6a737d, #8b949e);
+  --hl-keyword: light-dark(#d73a49, #ff7b72);
+  --hl-string: light-dark(#032f62, #a5d6ff);
+  --hl-function: light-dark(#6f42c1, #d2a8ff);
+  --hl-type: light-dark(#6f42c1, #d2a8ff);
+  --hl-constant: light-dark(#005cc5, #79c0ff);
+  --hl-variable: light-dark(#e36209, #ffa657);
+  --hl-tag: light-dark(#22863a, #7ee787);
+  --hl-operator: light-dark(#d73a49, #ff7b72);
+  --hl-error: light-dark(#b31d28, #ffa198);
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
 
@@ -76,6 +91,17 @@
   --color-accent: #3b82f6;
   --color-success: #34d399;
   --color-danger: #ef4444;
+  /* syntax: GitHub-dark vivo sobre o preto */
+  --hl-comment: #8b949e;
+  --hl-keyword: #ff7b72;
+  --hl-string: #a5d6ff;
+  --hl-function: #d2a8ff;
+  --hl-type: #f0883e;
+  --hl-constant: #79c0ff;
+  --hl-variable: #ffa657;
+  --hl-tag: #7ee787;
+  --hl-operator: #ff7b72;
+  --hl-error: #ffa198;
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.5);
   --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
   --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
@@ -101,6 +127,17 @@
   --color-on-danger: #11111b;
   --color-success: #a6e3a1;     /* green */
   --color-danger: #f38ba8;      /* red */
+  /* syntax: paleta Catppuccin */
+  --hl-comment: #6c7086;
+  --hl-keyword: #cba6f7;        /* mauve */
+  --hl-string: #a6e3a1;         /* green */
+  --hl-function: #89b4fa;       /* blue */
+  --hl-type: #f9e2af;           /* yellow */
+  --hl-constant: #fab387;       /* peach */
+  --hl-variable: #cdd6f4;       /* text */
+  --hl-tag: #f38ba8;            /* red */
+  --hl-operator: #89dceb;       /* sky */
+  --hl-error: #f38ba8;
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
   --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
   --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
@@ -125,6 +162,17 @@
   --color-on-accent: #282828;   /* texto escuro sobre o amarelo */
   --color-success: #b8bb26;     /* green */
   --color-danger: #fb4934;      /* red */
+  /* syntax: paleta Gruvbox */
+  --hl-comment: #928374;        /* gray */
+  --hl-keyword: #fb4934;        /* red */
+  --hl-string: #b8bb26;         /* green */
+  --hl-function: #b8bb26;       /* green */
+  --hl-type: #fabd2f;           /* yellow */
+  --hl-constant: #d3869b;       /* purple */
+  --hl-variable: #83a598;       /* blue */
+  --hl-tag: #8ec07c;            /* aqua */
+  --hl-operator: #fe8019;       /* orange */
+  --hl-error: #fb4934;
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
   --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
   --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
@@ -149,6 +197,17 @@
   --color-on-accent: #1f1f28;   /* texto escuro sobre o azul */
   --color-success: #98bb6c;     /* springGreen */
   --color-danger: #e46876;      /* waveRed */
+  /* syntax: paleta Kanagawa */
+  --hl-comment: #727169;        /* fujiGray */
+  --hl-keyword: #957fb8;        /* oniViolet */
+  --hl-string: #98bb6c;         /* springGreen */
+  --hl-function: #7e9cd8;       /* crystalBlue */
+  --hl-type: #7aa89f;           /* waveAqua2 */
+  --hl-constant: #ffa066;       /* surimiOrange */
+  --hl-variable: #dcd7ba;       /* fujiWhite */
+  --hl-tag: #e46876;            /* waveRed */
+  --hl-operator: #c0a36e;       /* boatYellow */
+  --hl-error: #e82424;          /* samuraiRed */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
   --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
   --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
@@ -249,23 +308,147 @@ body {
   color: var(--color-danger);
 }
 
-/* Seletor de tema no header. As <option> do dropdown nativo seguem o color-scheme
-   do tema ativo (por isso cada paleta declara color-scheme). */
-.theme-select {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  color: var(--color-text);
-  background-color: transparent;
-  border: 1px solid var(--color-border);
+/* Engrenagem no header → tela de configurações. */
+.settings-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-text-muted);
   border-radius: var(--radius);
-  padding: var(--space-xs) var(--space-sm);
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease;
 }
 
-.theme-select:hover {
+.settings-link:hover {
   color: var(--color-text);
-  border-color: var(--color-text-muted);
+}
+
+.settings-link__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* ===== Tela de configurações ===== */
+.settings__section {
+  margin-top: var(--space-xl);
+}
+
+.settings__section-title {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.settings__hint {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-lg);
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: var(--space-md);
+}
+
+/* Cada card carrega data-theme, então os --color-*/--hl-* DENTRO dele resolvem para
+   o tema do card — o preview é o tema de verdade, não uma imitação. */
+.theme-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  text-align: left;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.theme-card:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.theme-card:active {
+  transform: translateY(1px);
+}
+
+/* Anel no card do tema ativo (usa o accent do próprio tema). */
+.theme-card--active {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-card__preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 7rem;
+}
+
+.theme-card__preview--system {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.theme-card__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.theme-card__heading {
+  font-weight: 600;
+}
+
+.theme-card__linklike {
+  color: var(--color-link);
+  font-size: 0.875rem;
+}
+
+.theme-card__code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  overflow: hidden;
+  white-space: pre;
+}
+
+.theme-card__btn {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.theme-card__name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.theme-card__check {
+  color: var(--color-accent);
+  opacity: 0;
+}
+
+.theme-card--active .theme-card__check {
+  opacity: 1;
 }
 
 .flash {
@@ -883,43 +1066,48 @@ li {
   }
 }
 
-/* Syntax highlight (rouge) — tema GitHub, claro/escuro via light-dark(). O tema
-   efetivo aqui vem do color-scheme: as paletas escuras (catppuccin/gruvbox/kanagawa)
-   declaram color-scheme: dark, então o código usa a variante escura do GitHub sobre
-   o --color-code-bg da paleta. Para tematizar os tokens por paleta no futuro, trocar
-   estes light-dark() por variáveis --hl-* definidas em cada bloco [data-theme]. */
-.highlight .hll { background-color: light-dark(#ffffcc, #334155) }
+/* Syntax highlight (rouge) — as cores vêm das variáveis --hl-* por PAPEL, definidas
+   em cada tema (ver seção TEMAS). Assim cada paleta colore o código com suas cores,
+   não só claro/escuro. Mapa: classe do rouge -> papel semântico. Para retematizar,
+   mexa nos --hl-* do bloco do tema, não aqui. */
+.highlight .hll { background-color: color-mix(in srgb, var(--color-text) 12%, transparent) }
+
+/* comentários */
 .highlight .c,
+.highlight .ch,
+.highlight .cd,
 .highlight .cm,
-.highlight .c1 { color: light-dark(#6a737d, #8b949e); font-style: italic }
-.highlight .cs { color: light-dark(#6a737d, #8b949e); font-style: italic; font-weight: bold }
-.highlight .err { color: light-dark(#a61717, #f85149) }
+.highlight .cpf,
+.highlight .c1 { color: var(--hl-comment); font-style: italic }
+.highlight .cs { color: var(--hl-comment); font-style: italic; font-weight: bold }
+
+/* palavras-chave */
 .highlight .k,
 .highlight .kd,
 .highlight .kn,
 .highlight .kr,
+.highlight .kv,
+.highlight .kp,
 .highlight .ne,
-.highlight .ow,
-.highlight .cp { color: light-dark(#d73a49, #ff7b72); font-weight: bold }
+.highlight .cp { color: var(--hl-keyword); font-weight: bold }
+.highlight .kc { color: var(--hl-constant); font-weight: bold }
+.highlight .kt { color: var(--hl-type) }
+
+/* operadores */
 .highlight .o,
-.highlight .kp { color: light-dark(#d73a49, #ff7b72) }
-.highlight .kt,
-.highlight .nd,
-.highlight .nn { color: light-dark(#6f42c1, #d2a8ff) }
-.highlight .nc,
+.highlight .ow { color: var(--hl-operator) }
+
+/* funções, tipos/classes */
 .highlight .nf,
-.highlight .fm,
-.highlight .gu { color: light-dark(#6f42c1, #d2a8ff); font-weight: bold }
-.highlight .gd { color: light-dark(#b31d28, #ffa198); background-color: light-dark(#ffeef0, #490202) }
-.highlight .ge { font-style: italic }
-.highlight .gr,
-.highlight .gt { color: light-dark(#b31d28, #ffa198) }
-.highlight .gh,
-.highlight .kc { color: light-dark(#005cc5, #79c0ff); font-weight: bold }
-.highlight .gi { color: light-dark(#22863a, #7ee787); background-color: light-dark(#f0fff4, #033a16) }
-.highlight .go { color: light-dark(#6a737d, #8b949e) }
-.highlight .gp { color: light-dark(#735c0f, #d29922); font-weight: bold }
-.highlight .gs { font-weight: bold }
+.highlight .fm { color: var(--hl-function); font-weight: bold }
+.highlight .nc,
+.highlight .nn,
+.highlight .nd { color: var(--hl-type); font-weight: bold }
+
+/* constantes, builtins e números */
+.highlight .nb,
+.highlight .bp,
+.highlight .no,
 .highlight .m,
 .highlight .mb,
 .highlight .mf,
@@ -927,12 +1115,20 @@ li {
 .highlight .mi,
 .highlight .mo,
 .highlight .il,
-.highlight .nb,
-.highlight .no,
-.highlight .nl,
 .highlight .si,
-.highlight .ss,
-.highlight .bp { color: light-dark(#005cc5, #79c0ff) }
+.highlight .ss { color: var(--hl-constant) }
+
+/* variáveis e atributos */
+.highlight .na,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi { color: var(--hl-variable) }
+
+/* tags (HTML/XML) */
+.highlight .nt { color: var(--hl-tag) }
+
+/* strings */
 .highlight .s,
 .highlight .sa,
 .highlight .sb,
@@ -942,14 +1138,21 @@ li {
 .highlight .sh,
 .highlight .sx,
 .highlight .sr,
-.highlight .s1 { color: light-dark(#032f62, #a5d6ff) }
-.highlight .sd { color: light-dark(#032f62, #a5d6ff); font-style: italic }
-.highlight .se { color: light-dark(#032f62, #a5d6ff); font-weight: bold }
-.highlight .na,
-.highlight .nv,
-.highlight .vc,
-.highlight .vg,
-.highlight .vi { color: light-dark(#e36209, #ffa657) }
-.highlight .ni { color: light-dark(#24292e, #c9d1d9) }
-.highlight .nt { color: light-dark(#22863a, #7ee787) }
-.highlight .w { color: light-dark(#bbbbbb, #6e7681) }
+.highlight .s1 { color: var(--hl-string) }
+.highlight .sd { color: var(--hl-string); font-style: italic }
+.highlight .se { color: var(--hl-string); font-weight: bold }
+
+/* erros e espaço */
+.highlight .err { color: var(--hl-error) }
+.highlight .w { color: var(--color-text-muted) }
+
+/* genéricos (saída de diff em blocos ```diff) */
+.highlight .gi { color: var(--hl-string) }
+.highlight .gd { color: var(--hl-error) }
+.highlight .gh,
+.highlight .gu { color: var(--hl-constant); font-weight: bold }
+.highlight .gp { color: var(--hl-comment); font-weight: bold }
+.highlight .gr,
+.highlight .gt { color: var(--hl-error) }
+.highlight .ge { font-style: italic }
+.highlight .gs { font-weight: bold }
