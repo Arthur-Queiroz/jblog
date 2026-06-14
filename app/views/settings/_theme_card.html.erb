@@ -1,6 +1,7 @@
 <%# Um card = um botão que (1) renderiza no próprio tema, via data-theme, e
     (2) aplica esse tema ao clicar. O data-theme serve às DUAS coisas: o CSS usa o
-    atributo para pintar o preview, e o controller lê o mesmo atributo para aplicar. %>
+    atributo para pintar o card e as bolinhas, e o controller lê o mesmo atributo
+    para aplicar. As bolinhas mostram cores-chave da paleta. %>
 <button type="button"
         class="theme-card"
         data-theme="<%= theme[:id] %>"
@@ -9,19 +10,17 @@
         aria-pressed="false">
   <% if theme[:id] == "system" %>
     <span class="theme-card__preview theme-card__preview--system">
-      Segue o tema do seu dispositivo
+      Segue o tema do dispositivo
     </span>
   <% else %>
     <span class="theme-card__preview">
-      <span class="theme-card__row">
-        <span class="theme-card__heading">Título</span>
-        <span class="theme-card__linklike">um link</span>
+      <span class="theme-card__swatches">
+        <span class="theme-card__dot theme-card__dot--accent"></span>
+        <span class="theme-card__dot theme-card__dot--keyword"></span>
+        <span class="theme-card__dot theme-card__dot--string"></span>
+        <span class="theme-card__dot theme-card__dot--function"></span>
+        <span class="theme-card__dot theme-card__dot--constant"></span>
       </span>
-      <span class="theme-card__code highlight"><code><span class="c"># dobra o valor</span>
-<span class="k">def</span> <span class="nf">dobro</span>(<span class="nv">n</span>)
-  <span class="nb">Integer</span>(<span class="nv">n</span>) <span class="o">*</span> <span class="mi">2</span>
-<span class="k">end</span></code></span>
-      <span class="theme-card__btn">Botão</span>
     </span>
   <% end %>
   <span class="theme-card__name">
