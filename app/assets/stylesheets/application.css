@@ -1,8 +1,11 @@
-/* Tema: cada cor é declarada uma vez com light-dark(claro, escuro). O tema efetivo vem
-   do color-scheme — segue o SO por padrão e é forçado via [data-theme] pelo toggle. */
-:root {
-  color-scheme: light dark;
-
+/* Tokens de COR com light-dark(claro, escuro). Valem para o default (:root) e
+   também para os temas claro/blue — INCLUSIVE quando renderizados como card dentro
+   de uma página de paleta fixa (catppuccin etc.). Re-declarar aqui é o que evita o
+   card "Claro"/"Blue" HERDAR o --color-bg fixo do tema ancestral. O color-scheme
+   (definido logo abaixo por [data-theme]) decide qual lado do light-dark() vale. */
+:root,
+[data-theme="light"],
+[data-theme="blue"] {
   --color-bg: light-dark(#fafafa, #0f172a);
   --color-surface: light-dark(#ffffff, #1e293b);
   --color-text: light-dark(#1a1a1a, #f1f5f9);
@@ -30,7 +33,7 @@
   /* Cores do syntax highlight, por PAPEL (não por classe do rouge). Cada tema
      redefine estas — é o que dá a "variedade" de uma paleta (keyword, string,
      função, tipo... com cores próprias), como num colorscheme de editor.
-     Aqui no :root usam light-dark() (GitHub claro/escuro), cobrindo claro/blue. */
+     Aqui usam light-dark() (GitHub claro/escuro), cobrindo claro/blue. */
   --hl-comment: light-dark(#6a737d, #8b949e);
   --hl-keyword: light-dark(#d73a49, #ff7b72);
   --hl-string: light-dark(#032f62, #a5d6ff);
@@ -41,6 +44,11 @@
   --hl-tag: light-dark(#22863a, #7ee787);
   --hl-operator: light-dark(#d73a49, #ff7b72);
   --hl-error: light-dark(#b31d28, #ffa198);
+}
+
+/* Tokens estruturais (iguais em todos os temas) + esquema padrão (segue o SO). */
+:root {
+  color-scheme: light dark;
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
@@ -415,7 +423,7 @@ body {
 
 .theme-card__dot--keyword { background-color: var(--hl-keyword); }
 .theme-card__dot--string { background-color: var(--hl-string); }
-.theme-card__dot--constant { background-color: var(--hl-constant); }
+.theme-card__dot--type { background-color: var(--hl-type); }
 
 .theme-card__name {
   display: flex;
