@@ -10,10 +10,11 @@
     <%= csp_meta_tag %>
 
     <%# Aplica o tema salvo antes do primeiro paint para evitar flash do tema errado.
-        O nonce é obrigatório — a CSP bloqueia script inline sem ele. %>
+        Aplica qualquer valor salvo: um data-theme desconhecido apenas cai no :root
+        (segue o SO), sem quebrar. O nonce é obrigatório — a CSP bloqueia inline sem ele. %>
     <script nonce="<%= content_security_policy_nonce %>">
       const theme = localStorage.getItem("theme");
-      if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      if (theme) document.documentElement.dataset.theme = theme;
     </script>
 
     <%= yield :head %>
@@ -39,18 +40,16 @@
           <% else %>
             <%= link_to "Entrar", new_session_path %>
           <% end %>
-          <button type="button" class="theme-toggle" data-controller="theme" data-action="click->theme#toggle" aria-label="Alternar tema claro/escuro">
-            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="5"/>
-              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-          </button>
+          <%# Seletor de tema. "Sistema" = seguir o SO; as paletas estão no CSS como
+              blocos [data-theme]. Para adicionar uma, é só mais uma <option> aqui. %>
+          <select class="theme-select" data-controller="theme" data-action="change->theme#apply" aria-label="Tema">
+            <option value="system">Sistema</option>
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+            <option value="catppuccin">Catppuccin</option>
+            <option value="gruvbox">Gruvbox</option>
+            <option value="kanagawa">Kanagawa</option>
+          </select>
         </nav>
       </div>
     </header>

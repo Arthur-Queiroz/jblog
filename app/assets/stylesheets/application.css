@@ -13,6 +13,10 @@
   --color-code-bg: light-dark(#f3f4f6, #1e293b);
   --color-code-text: light-dark(#dc2626, #f87171);
   --color-accent: #2563eb;
+  /* Texto sobre superfícies coloridas (botões). Fica como token porque em algumas
+     paletas o accent/danger são cores claras e exigem texto escuro por cima. */
+  --color-on-accent: #ffffff;
+  --color-on-danger: #ffffff;
   --color-success: #059669;
   --color-success-bg: light-dark(#ecfdf5, #064e3b);
   --color-success-border: light-dark(#a7f3d0, #065f46);
@@ -39,8 +43,96 @@
   --radius-lg: 0.625rem;
 }
 
+/* ============================================================================
+   TEMAS
+
+   - claro/escuro: vêm do :root via light-dark(); sem [data-theme] o site segue o
+     SO. As duas linhas abaixo só FORÇAM um dos dois quando o usuário escolhe.
+   - paletas fixas (catppuccin/gruvbox/kanagawa): cada bloco [data-theme] reescreve
+     os tokens --color-*. O resto do CSS usa só esses tokens, então herda de graça.
+
+   Para ADICIONAR um tema:
+     1. copie um bloco [data-theme="x"] abaixo e troque as cores;
+     2. ponha `color-scheme: dark` (ou light) — controla os controles nativos do
+        navegador e o syntax highlight (que usa light-dark);
+     3. adicione uma <option> no <select> de tema (app/views/layouts/application.html.erb).
+   Os tons *-bg/*-border/header-bg são derivados com color-mix() para não repetir cor.
+   ============================================================================ */
 [data-theme="light"] { color-scheme: light; }
 [data-theme="dark"] { color-scheme: dark; }
+
+/* Catppuccin (Mocha) */
+[data-theme="catppuccin"] {
+  color-scheme: dark;
+  --color-bg: #1e1e2e;          /* base */
+  --color-surface: #313244;     /* surface0 */
+  --color-text: #cdd6f4;        /* text */
+  --color-text-muted: #a6adc8;  /* subtext0 */
+  --color-border: #45475a;      /* surface1 */
+  --color-link: #89b4fa;        /* blue */
+  --color-link-hover: #b4befe;  /* lavender */
+  --color-code-bg: #181825;     /* mantle */
+  --color-code-text: #f38ba8;   /* red */
+  --color-accent: #89b4fa;      /* blue */
+  --color-on-accent: #11111b;   /* crust — texto escuro sobre o azul claro */
+  --color-on-danger: #11111b;
+  --color-success: #a6e3a1;     /* green */
+  --color-danger: #f38ba8;      /* red */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
+  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
+  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
+  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
+  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+}
+
+/* Gruvbox (dark) */
+[data-theme="gruvbox"] {
+  color-scheme: dark;
+  --color-bg: #282828;          /* bg0 */
+  --color-surface: #3c3836;     /* bg1 */
+  --color-text: #ebdbb2;        /* fg1 */
+  --color-text-muted: #a89984;  /* fg4 */
+  --color-border: #504945;      /* bg2 */
+  --color-link: #83a598;        /* blue */
+  --color-link-hover: #8ec07c;  /* aqua */
+  --color-code-bg: #1d2021;     /* bg0_hard */
+  --color-code-text: #fb4934;   /* red */
+  --color-accent: #fabd2f;      /* yellow */
+  --color-on-accent: #282828;   /* texto escuro sobre o amarelo */
+  --color-success: #b8bb26;     /* green */
+  --color-danger: #fb4934;      /* red */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
+  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
+  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
+  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
+  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+}
+
+/* Kanagawa (Wave) */
+[data-theme="kanagawa"] {
+  color-scheme: dark;
+  --color-bg: #1f1f28;          /* sumiInk3 */
+  --color-surface: #2a2a37;     /* sumiInk4 */
+  --color-text: #dcd7ba;        /* fujiWhite */
+  --color-text-muted: #9d9ca6;  /* dim, legível sobre o fundo escuro */
+  --color-border: #363646;      /* sumiInk claro */
+  --color-link: #7e9cd8;        /* crystalBlue */
+  --color-link-hover: #7fb4ca;  /* springBlue */
+  --color-code-bg: #16161d;     /* sumiInk0 */
+  --color-code-text: #d27e99;   /* sakuraPink */
+  --color-accent: #7e9cd8;      /* crystalBlue */
+  --color-on-accent: #1f1f28;   /* texto escuro sobre o azul */
+  --color-success: #98bb6c;     /* springGreen */
+  --color-danger: #e46876;      /* waveRed */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
+  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
+  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
+  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
+  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
+  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+}
 
 * {
   box-sizing: border-box;
@@ -134,40 +226,23 @@ body {
   color: var(--color-danger);
 }
 
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  background: none;
-  border: 1px solid transparent;
-  border-radius: var(--radius);
+/* Seletor de tema no header. As <option> do dropdown nativo seguem o color-scheme
+   do tema ativo (por isso cada paleta declara color-scheme). */
+.theme-select {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
   color: var(--color-text-muted);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.theme-toggle:hover {
+.theme-select:hover {
   color: var(--color-text);
-  border-color: var(--color-border);
-}
-
-.theme-toggle__icon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-/* Mostra a lua no tema claro (clicar leva ao escuro) e o sol no escuro.
-   Único lugar que ainda precisa da media query: o ícone depende do tema EFETIVO,
-   que sem data-theme vem do SO. */
-.theme-toggle__icon--sun { display: none; }
-[data-theme="dark"] .theme-toggle__icon--sun { display: block; }
-[data-theme="dark"] .theme-toggle__icon--moon { display: none; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle__icon--sun { display: block; }
-  :root:not([data-theme="light"]) .theme-toggle__icon--moon { display: none; }
+  border-color: var(--color-text-muted);
 }
 
 .flash {
@@ -388,7 +463,7 @@ li {
 .search-form__input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px light-dark(rgba(37, 99, 235, 0.15), rgba(96, 165, 250, 0.2));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 
 .search-form__button {
@@ -397,7 +472,7 @@ li {
   font-weight: 500;
   padding: var(--space-sm) var(--space-lg);
   background-color: var(--color-accent);
-  color: white;
+  color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
@@ -474,7 +549,7 @@ li {
 
 .btn--primary {
   background-color: var(--color-accent);
-  color: white;
+  color: var(--color-on-accent);
 }
 
 .btn--secondary {
@@ -485,7 +560,7 @@ li {
 
 .btn--danger {
   background-color: var(--color-danger);
-  color: white;
+  color: var(--color-on-danger);
 }
 
 .admin-table {
@@ -586,7 +661,7 @@ li {
 .form__textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px light-dark(rgba(37, 99, 235, 0.15), rgba(96, 165, 250, 0.2));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 
 .form__textarea {
@@ -785,7 +860,11 @@ li {
   }
 }
 
-/* Syntax highlight (rouge) — tema GitHub, claro/escuro via light-dark(). */
+/* Syntax highlight (rouge) — tema GitHub, claro/escuro via light-dark(). O tema
+   efetivo aqui vem do color-scheme: as paletas escuras (catppuccin/gruvbox/kanagawa)
+   declaram color-scheme: dark, então o código usa a variante escura do GitHub sobre
+   o --color-code-bg da paleta. Para tematizar os tokens por paleta no futuro, trocar
+   estes light-dark() por variáveis --hl-* definidas em cada bloco [data-theme]. */
 .highlight .hll { background-color: light-dark(#ffffcc, #334155) }
 .highlight .c,
 .highlight .cm,

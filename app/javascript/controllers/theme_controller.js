@@ -1,16 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Alterna claro/escuro e persiste a escolha. Sem escolha salva, o site segue o SO
-// (o script inline no <head> do layout aplica o tema salvo antes do primeiro paint).
+// Aplica o tema escolhido no <html> e persiste no localStorage. O próprio <select>
+// é o elemento do controller. Sem escolha salva ("Sistema"), removemos o data-theme
+// e o site volta a seguir o SO (o :root usa light-dark()).
+//
+// Adicionar um tema é só: novo bloco [data-theme] no CSS + nova <option> no layout.
+// Nada muda aqui — o controller só lê o value do select.
 export default class extends Controller {
-  toggle() {
-    const current = document.documentElement.dataset.theme || this.systemTheme()
-    const next = current === "dark" ? "light" : "dark"
-    document.documentElement.dataset.theme = next
-    localStorage.setItem("theme", next)
+  connect() {
+    // Reflete no select o tema atualmente forçado (ou "Sistema" quando não há).
+    this.element.value = document.documentElement.dataset.theme || "system"
   }
 
-  systemTheme() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  apply() {
+    const theme = this.element.value
+    if (theme === "system") {
+      delete document.documentElement.dataset.theme
+      localStorage.removeItem("theme")
+    } else {
+      document.documentElement.dataset.theme = theme
+      localStorage.setItem("theme", theme)
+    }
   }
 }
