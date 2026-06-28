@@ -8,7 +8,7 @@ image: arthur-queiroz/jblog
 # Deploy to these servers.
 servers:
   web:
-    - 2.25.158.85
+    - 187.127.34.186
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
@@ -94,7 +94,7 @@ builder:
 accessories:
   db:
     image: postgres:16
-    host: 2.25.158.85
+    host: 187.127.34.186
     # Sem mapeamento de porta no host: o app alcança o banco pelo nome do container
     # (jblog-db) na rede docker do kamal. Evita colisão com o postgres compartilhado
     # que já ocupa a 5432 na VPS, e não expõe o banco.
