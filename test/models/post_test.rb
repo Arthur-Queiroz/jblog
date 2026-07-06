@@ -63,4 +63,35 @@ class PostTest < ActiveSupport::TestCase
     assert_not_includes post.body_html, "onerror"
     assert_not_includes post.body_html, "<script"
   end
+
+  test "excerpt returns first paragraph as plain text" do
+    post = Post.new(body_markdown: "Primeiro **parágrafo** com _formatação_.\n\nSegundo parágrafo.")
+    assert_equal "Primeiro parágrafo com formatação.", post.excerpt
+  end
+
+  test "excerpt strips markdown links" do
+    post = Post.new(body_markdown: "Texto com [link](https://example.com) aqui.")
+    assert_equal "Texto com link aqui.", post.excerpt
+  end
+
+  test "excerpt truncates at 200 characters" do
+    long_text = "a " * 150
+    post = Post.new(body_markdown: long_text)
+    assert post.excerpt.length <= 200
+  end
+
+  test "excerpt handles empty body" do
+    post = Post.new(body_markdown: "")
+    assert_equal "", post.excerpt
+  end
+
+  test "reading_time_minutes returns at least 1" do
+    post = Post.new(body_markdown: "Poucas palavras.")
+    assert_equal 1, post.reading_time_minutes
+  end
+
+  test "reading_time_minutes calculates from word count" do
+    post = Post.new(body_markdown: "palavra " * 400)
+    assert_equal 2, post.reading_time_minutes
+  end
 end

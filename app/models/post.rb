@@ -18,6 +18,21 @@ class Post < ApplicationRecord
     slug
   end
 
+  def excerpt(max_length: 200)
+    first_paragraph = body_markdown.to_s.split(/\n\s*\n/, 2).first.to_s
+    plain = first_paragraph
+      .gsub(/!\[.*?\]\(.*?\)/, "")
+      .gsub(/\[([^\]]*)\]\(.*?\)/, '\1')
+      .gsub(/[*_~`#>]/, "")
+      .squish
+    plain.truncate(max_length, separator: /\s/)
+  end
+
+  def reading_time_minutes
+    words = body_markdown.to_s.split(/\s+/).reject(&:blank?).size
+    [ (words / 200.0).ceil, 1 ].max
+  end
+
   private
 
   def generate_slug
