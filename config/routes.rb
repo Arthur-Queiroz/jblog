@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api, defaults: { format: :json } do
+    resources :posts, only: :index
+  end
+
   get "posts/:slug", to: "posts#show", as: :post
 
   get "up" => "rails/health#show", as: :rails_health_check

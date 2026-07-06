@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -e
+
+echo "=== Validando Posts API do jblog ==="
+echo
+
+# Verifica se o Rails está rodando
+if ! curl -s http://localhost:3000/up > /dev/null 2>&1; then
+  echo "❌ Rails não está rodando em localhost:3000"
+  echo "   Rode: bin/rails server"
+  exit 1
+fi
+
+echo "✓ Rails está rodando"
+echo
+
+# Testa o endpoint
+echo "=== GET /api/posts ==="
+response=$(curl -s -w "\n%{http_code}" http://localhost:3000/api/posts)
+body=$(echo "$response" | head -n -1)
+status=$(echo "$response" | tail -n 1)
+
+if [ "$status" != "200" ]; then
+  echo "❌ Status code: $status (esperado: 200)"
+  exit 1
+fi
+
+echo "✓ Status: 200 OK"
+echo
+
+# Valida o JSON
+echo "=== Response body ==="
+echo "$body" | jq .
+echo
+
+# Valida os campos
+echo "=== Validando shape ==="
+first_post=$(echo "$body" | jq '.[0]')
+
+required_fields=("slug" "title" "excerpt" "url" "publishedAt" "readingTimeMinutes" "tags")
+for field in "${required_fields[@]}"; do
+  if ! echo "$first_post" | jq -e ".$field" > /dev/null 2>&1; then
+    echo "❌ Campo faltando: $field"
+    exit 1
+  fi
+  echo "✓ $field presente"
+done
+
+# Valida tipos
+echo
+echo "=== Validando tipos ==="
+
+if ! echo "$first_post" | jq -e '.readingTimeMinutes | type == "number"' > /dev/null 2>&1; then
+  echo "❌ readingTimeMinutes deve ser número"
+  exit 1
+fi
+echo "✓ readingTimeMinutes é número"
+
+if ! echo "$first_post" | jq -e '.tags | type == "array"' > /dev/null 2>&1; then
+  echo "❌ tags deve ser array"
+  exit 1
+fi
+echo "✓ tags é array"
+
+if ! echo "$first_post" | jq -e '.publishedAt | test("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")' > /dev/null 2>&1; then
+  echo "❌ publishedAt deve ser YYYY-MM-DD"
+  exit 1
+fi
+echo "✓ publishedAt é YYYY-MM-DD"
+
+if ! echo "$first_post" | jq -e '.url | test("^https?://")' > /dev/null 2>&1; then
+  echo "❌ url deve ser absoluta (http:// ou https://)"
+  exit 1
+fi
+echo "✓ url é absoluta"
+
+excerpt_length=$(echo "$first_post" | jq -r '.excerpt | length')
+if [ "$excerpt_length" -gt 200 ]; then
+  echo "❌ excerpt tem $excerpt_length caracteres (máximo: 200)"
+  exit 1
+fi
+echo "✓ excerpt ≤ 200 caracteres ($excerpt_length chars)"
+
+echo
+echo "=== ✅ Validação completa ==="
+echo
+echo "Para testar com limite:"
+echo "  curl http://localhost:3000/api/posts?limit=3"
