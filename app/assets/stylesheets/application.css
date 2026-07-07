@@ -1,12 +1,9 @@
-/* Tokens de COR com light-dark(claro, escuro). Valem para o default (:root) e
-   também para os temas claro/escuro — INCLUSIVE quando renderizados como card dentro
-   de uma página de paleta fixa (catppuccin etc.). Re-declarar aqui é o que evita o
-   card "Claro"/"Escuro" HERDAR o --color-bg fixo do tema ancestral. O color-scheme
-   (definido logo abaixo por [data-theme]) decide qual lado do light-dark() vale. */
+/* Tokens de COR com light-dark(claro, escuro). O site tem só dois temas: claro e
+   escuro, os dois lados desta mesma paleta. Sem [data-theme] segue o SO; com
+   [data-theme="light"|"dark"] o color-scheme (logo abaixo) força um dos lados. */
 :root,
 [data-theme="light"],
-[data-theme="dark"],
-[data-theme="blue"] {
+[data-theme="dark"] {
   /* Paleta do redesign: tons quentes de papel/carvão (claro #faf7f0, escuro #151310). */
   --color-bg: light-dark(#faf7f0, #151310);
   --color-surface: light-dark(#f2ede2, #1c1a16);
@@ -35,10 +32,9 @@
   --shadow-card: light-dark(0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.2)),
                  light-dark(0 4px 12px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.15));
 
-  /* Cores do syntax highlight, por PAPEL (não por classe do rouge). Cada tema
-     redefine estas — é o que dá a "variedade" de uma paleta (keyword, string,
-     função, tipo... com cores próprias), como num colorscheme de editor.
-     Aqui usam light-dark() (GitHub claro/escuro), cobrindo claro/blue. */
+  /* Cores do syntax highlight, por PAPEL (não por classe do rouge): keyword,
+     string, função, tipo... cada uma com sua cor, como num colorscheme de editor.
+     Usam light-dark() (paleta GitHub claro/escuro), cobrindo os dois temas. */
   --hl-comment: light-dark(#6a737d, #8b949e);
   --hl-keyword: light-dark(#d73a49, #ff7b72);
   --hl-string: light-dark(#032f62, #a5d6ff);
@@ -77,173 +73,11 @@
   --radius-lg: 0.625rem;
 }
 
-/* ============================================================================
-   TEMAS
-
-   - claro/escuro: vêm do :root via light-dark() (a paleta quente do redesign). Sem
-     [data-theme] o site segue o SO; as linhas abaixo só FORÇAM um dos dois lados.
-   - paletas fixas (preto/catppuccin/gruvbox/kanagawa): cada bloco [data-theme] reescreve
-     os tokens --color-*. O resto do CSS usa só esses tokens, então herda de graça.
-
-   Para ADICIONAR um tema:
-     1. copie um bloco [data-theme="x"] abaixo e troque as cores;
-     2. ponha `color-scheme: dark` (ou light) — controla os controles nativos do
-        navegador e o syntax highlight (que usa light-dark);
-     3. adicione uma entrada em THEMES (app/controllers/settings_controller.rb).
-   Os tons *-bg/*-border/header-bg são derivados com color-mix() para não repetir cor.
-   ============================================================================ */
-[data-theme="light"] { color-scheme: light; }   /* lado claro do :root */
-[data-theme="dark"],
-[data-theme="blue"] { color-scheme: dark; }      /* lado escuro do :root ("blue" é alias
-                                                    do antigo tema salvo em localStorage) */
-
-/* Preto (OLED) — o "dark de verdade", fundo #000 */
-[data-theme="black"] {
-  color-scheme: dark;
-  --color-bg: #000000;
-  --color-surface: #0d0d0d;
-  --color-text: #ededed;
-  --color-text-muted: #8a8a8a;
-  --color-border: #262626;
-  --color-link: #60a5fa;
-  --color-link-hover: #93c5fd;
-  --color-code-bg: #0a0a0a;
-  --color-code-text: #f87171;
-  --color-accent: #3b82f6;
-  --color-success: #34d399;
-  --color-danger: #ef4444;
-  /* syntax: GitHub-dark vivo sobre o preto */
-  --hl-comment: #8b949e;
-  --hl-keyword: #ff7b72;
-  --hl-string: #a5d6ff;
-  --hl-function: #d2a8ff;
-  --hl-type: #f0883e;
-  --hl-constant: #79c0ff;
-  --hl-variable: #ffa657;
-  --hl-tag: #7ee787;
-  --hl-operator: #ff7b72;
-  --hl-error: #ffa198;
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.5);
-  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
-  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
-  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
-  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
-  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
-  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
-  --color-badge-text: var(--color-text);
-}
-
-/* Catppuccin (Mocha) */
-[data-theme="catppuccin"] {
-  color-scheme: dark;
-  --color-bg: #1e1e2e;          /* base */
-  --color-surface: #313244;     /* surface0 */
-  --color-text: #cdd6f4;        /* text */
-  --color-text-muted: #a6adc8;  /* subtext0 */
-  --color-border: #45475a;      /* surface1 */
-  --color-link: #89b4fa;        /* blue */
-  --color-link-hover: #b4befe;  /* lavender */
-  --color-code-bg: #181825;     /* mantle */
-  --color-code-text: #f38ba8;   /* red */
-  --color-accent: #cba6f7;      /* mauve — cor-assinatura do Catppuccin (logo/botões) */
-  --color-on-accent: #11111b;   /* crust — texto escuro sobre o mauve claro */
-  --color-on-danger: #11111b;
-  --color-success: #a6e3a1;     /* green */
-  --color-danger: #f38ba8;      /* red */
-  /* syntax: paleta Catppuccin */
-  --hl-comment: #6c7086;
-  --hl-keyword: #cba6f7;        /* mauve */
-  --hl-string: #a6e3a1;         /* green */
-  --hl-function: #89b4fa;       /* blue */
-  --hl-type: #f9e2af;           /* yellow */
-  --hl-constant: #fab387;       /* peach */
-  --hl-variable: #cdd6f4;       /* text */
-  --hl-tag: #f38ba8;            /* red */
-  --hl-operator: #89dceb;       /* sky */
-  --hl-error: #f38ba8;
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
-  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
-  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
-  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
-  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
-  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
-  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
-  --color-badge-text: var(--color-text);
-}
-
-/* Gruvbox (dark) */
-[data-theme="gruvbox"] {
-  color-scheme: dark;
-  --color-bg: #282828;          /* bg0 */
-  --color-surface: #3c3836;     /* bg1 */
-  --color-text: #ebdbb2;        /* fg1 */
-  --color-text-muted: #a89984;  /* fg4 */
-  --color-border: #504945;      /* bg2 */
-  --color-link: #83a598;        /* blue */
-  --color-link-hover: #8ec07c;  /* aqua */
-  --color-code-bg: #1d2021;     /* bg0_hard */
-  --color-code-text: #fb4934;   /* red */
-  --color-accent: #fabd2f;      /* yellow */
-  --color-on-accent: #282828;   /* texto escuro sobre o amarelo */
-  --color-success: #b8bb26;     /* green */
-  --color-danger: #fb4934;      /* red */
-  /* syntax: paleta Gruvbox */
-  --hl-comment: #928374;        /* gray */
-  --hl-keyword: #fb4934;        /* red */
-  --hl-string: #b8bb26;         /* green */
-  --hl-function: #b8bb26;       /* green */
-  --hl-type: #fabd2f;           /* yellow */
-  --hl-constant: #d3869b;       /* purple */
-  --hl-variable: #83a598;       /* blue */
-  --hl-tag: #8ec07c;            /* aqua */
-  --hl-operator: #fe8019;       /* orange */
-  --hl-error: #fb4934;
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
-  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
-  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
-  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
-  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
-  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
-  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
-  --color-badge-text: var(--color-text);
-}
-
-/* Kanagawa (Wave) */
-[data-theme="kanagawa"] {
-  color-scheme: dark;
-  --color-bg: #1f1f28;          /* sumiInk3 */
-  --color-surface: #2a2a37;     /* sumiInk4 */
-  --color-text: #dcd7ba;        /* fujiWhite */
-  --color-text-muted: #9d9ca6;  /* dim, legível sobre o fundo escuro */
-  --color-border: #363646;      /* sumiInk claro */
-  --color-link: #7e9cd8;        /* crystalBlue */
-  --color-link-hover: #7fb4ca;  /* springBlue */
-  --color-code-bg: #16161d;     /* sumiInk0 */
-  --color-code-text: #d27e99;   /* sakuraPink */
-  --color-accent: #ffa066;      /* surimiOrange — cor-assinatura do Kanagawa (logo/botões) */
-  --color-on-accent: #1f1f28;   /* texto escuro sobre o laranja */
-  --color-success: #98bb6c;     /* springGreen */
-  --color-danger: #e46876;      /* waveRed */
-  /* syntax: paleta Kanagawa */
-  --hl-comment: #727169;        /* fujiGray */
-  --hl-keyword: #957fb8;        /* oniViolet */
-  --hl-string: #98bb6c;         /* springGreen */
-  --hl-function: #7e9cd8;       /* crystalBlue */
-  --hl-type: #7aa89f;           /* waveAqua2 */
-  --hl-constant: #ffa066;       /* surimiOrange */
-  --hl-variable: #dcd7ba;       /* fujiWhite */
-  --hl-tag: #e46876;            /* waveRed */
-  --hl-operator: #c0a36e;       /* boatYellow */
-  --hl-error: #e82424;          /* samuraiRed */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
-  --color-success-bg: color-mix(in srgb, var(--color-success) 15%, var(--color-bg));
-  --color-success-border: color-mix(in srgb, var(--color-success) 35%, var(--color-bg));
-  --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
-  --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
-  --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
-  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
-  --color-badge-text: var(--color-text);
-}
+/* Só dois temas, os dois lados da mesma paleta light-dark(). Sem [data-theme] o
+   site segue o SO; estas duas linhas forçam um lado. O color-scheme também controla
+   os controles nativos do navegador e o syntax highlight (que usa light-dark). */
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
 
 * {
   box-sizing: border-box;
@@ -428,123 +262,21 @@ body {
   color: var(--color-link);
 }
 
-/* Engrenagem no header → tela de configurações. */
-.settings-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  color: var(--color-text-muted);
-  border-radius: var(--radius);
-  transition: color 0.15s ease;
+/* Qual ícone aparece é decidido só por CSS, pelo color-scheme efetivo: lua no
+   escuro, sol no claro. Sem depender de JS, nunca pisca nem mostra os dois.
+   Default (sem [data-theme]): segue o SO via prefers-color-scheme. */
+.theme-toggle__icon--moon { display: none; }
+.theme-toggle__icon--sun { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-toggle__icon--moon { display: block; }
+  :root:not([data-theme]) .theme-toggle__icon--sun { display: none; }
 }
 
-.settings-link:hover {
-  color: var(--color-text);
-}
-
-.settings-link__icon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-/* ===== Tela de configurações ===== */
-.settings__section {
-  margin-top: var(--space-xl);
-}
-
-.settings__section-title {
-  margin-top: 0;
-  font-size: 1.25rem;
-}
-
-.settings__hint {
-  color: var(--color-text-muted);
-  font-size: 0.9375rem;
-  margin-bottom: var(--space-lg);
-}
-
-.theme-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-  gap: var(--space-md);
-}
-
-/* Cada card carrega data-theme, então as variáveis de cor (--color e --hl) DENTRO
-   dele resolvem para o tema do card — preview de verdade, não imitação. */
-.theme-card {
-  /* Sem isto o <button> usa a aparência nativa (appearance: auto) e IGNORA o
-     background-color — todos os cards saíam com o cinza nativo do controle. */
-  appearance: none;
-  -webkit-appearance: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  padding: var(--space-md);
-  text-align: left;
-  font-family: var(--font-sans);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.15s ease;
-}
-
-.theme-card:hover {
-  box-shadow: var(--shadow-card);
-}
-
-.theme-card:active {
-  transform: translateY(1px);
-}
-
-/* Anel no card do tema ativo (usa o accent do próprio tema). */
-.theme-card--active {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-.theme-card__preview {
-  display: flex;
-  align-items: center;
-  min-height: 2.25rem;
-}
-
-/* Bolinhas com cores-chave da paleta. Resolvem via data-theme do card, então cada
-   card mostra as cores reais do seu tema. */
-.theme-card__swatches {
-  display: flex;
-  gap: var(--space-xs);
-}
-
-.theme-card__dot {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-}
-
-.theme-card__dot--keyword { background-color: var(--hl-keyword); }
-.theme-card__dot--type { background-color: var(--hl-type); }
-.theme-card__dot--constant { background-color: var(--hl-constant); }
-
-.theme-card__name {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
-  font-size: 0.9375rem;
-}
-
-.theme-card__check {
-  color: var(--color-accent);
-  opacity: 0;
-}
-
-.theme-card--active .theme-card__check {
-  opacity: 1;
-}
+[data-theme="dark"] .theme-toggle__icon--moon { display: block; }
+[data-theme="dark"] .theme-toggle__icon--sun { display: none; }
+[data-theme="light"] .theme-toggle__icon--moon { display: none; }
+[data-theme="light"] .theme-toggle__icon--sun { display: block; }
 
 .flash {
   padding: var(--space-md) var(--space-lg);
