@@ -2,6 +2,11 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
+  # O redesign removeu o botão de login do header; o acesso ao painel é por URL direta.
+  # /login abre o formulário; /admin cai no CRUD (que já redireciona ao login se preciso).
+  get "login", to: "sessions#new", as: :login
+  get "admin", to: redirect("/admin/posts")
+
   root "posts#index"
 
   get "search", to: "search#index", as: :search

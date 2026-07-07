@@ -6,7 +6,7 @@ class SettingsController < ApplicationController
   # é a ordem do grid. Para um tema novo: bloco [data-theme] no CSS + entrada aqui.
   THEMES = [
     { id: "light",      name: "Claro" },
-    { id: "blue",       name: "Blue" },
+    { id: "dark",       name: "Escuro" },
     { id: "black",      name: "Preto" },
     { id: "catppuccin", name: "Catppuccin" },
     { id: "gruvbox",    name: "Gruvbox" },

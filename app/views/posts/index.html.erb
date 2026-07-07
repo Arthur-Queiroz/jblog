@@ -1,20 +1,61 @@
 <% content_for(:title, "jblog") %>
 
-<% if @posts.empty? %>
-  <div class="empty-state">
-    <p>Nenhum post publicado ainda.</p>
-  </div>
-<% else %>
-  <ul class="post-list">
-    <% @posts.each do |post| %>
-      <li class="post-list__item">
-        <h2 class="post-list__title">
-          <%= link_to post.title, post_path(post) %>
-        </h2>
-        <time class="post-list__date" datetime="<%= post.published_at&.iso8601 %>">
-          <%= post.published_at&.strftime("%d de %B de %Y") %>
-        </time>
-      </li>
+<div class="layout-grid">
+  <div></div>
+
+  <div>
+    <h1 class="home-title">jblog</h1>
+
+    <% if @posts_by_month.empty? %>
+      <div class="empty-state">
+        <p>Nenhum post publicado ainda.</p>
+      </div>
+    <% else %>
+      <details class="destaques">
+        <summary class="destaques__header">
+          <span class="destaques__title">Destaques</span>
+          <span class="destaques__toggle">
+            <span class="destaques__toggle-show">Mostrar</span>
+            <span class="destaques__toggle-hide">Esconder</span>
+          </span>
+        </summary>
+
+        <ul class="destaques__list">
+          <% @featured_posts.each do |post| %>
+            <li class="destaques__item">
+              <span class="date-badge"><%= post.published_at&.to_date&.iso8601 %></span>
+              <span class="destaques__dash">&mdash;</span>
+              <%= link_to post.title, post_path(post), class: "destaques__link" %>
+            </li>
+          <% end %>
+        </ul>
+      </details>
+
+      <% @posts_by_month.each do |month, posts| %>
+        <section class="month-group">
+          <h2 class="month-group__title" id="<%= month_group_title(month).parameterize %>">
+            <%= month_group_title(month) %>
+          </h2>
+          <ul class="month-group__list">
+            <% posts.each do |post| %>
+              <li class="month-group__item">
+                <%= link_to post.title, post_path(post), class: "month-group__link" %>
+              </li>
+            <% end %>
+          </ul>
+        </section>
+      <% end %>
     <% end %>
-  </ul>
-<% end %>
+  </div>
+
+  <aside class="page-aside">
+    <% if @posts_by_month.any? %>
+      <div class="page-aside__title">Nesta página</div>
+      <% @posts_by_month.each_key do |month| %>
+        <a class="page-aside__link" href="#<%= month_group_title(month).parameterize %>">
+          <%= month_group_title(month) %>
+        </a>
+      <% end %>
+    <% end %>
+  </aside>
+</div>

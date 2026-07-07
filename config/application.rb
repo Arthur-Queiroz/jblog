@@ -16,6 +16,10 @@ module Jblog
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # Datas das views em português ("6 de julho de 2026") — ver config/locales/pt-BR.yml.
+    config.i18n.available_locales = [ :"pt-BR", :en ]
+    config.i18n.default_locale = :"pt-BR"
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

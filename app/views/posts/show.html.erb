@@ -1,16 +1,33 @@
 <% content_for(:title, @post.title) %>
 
-<article>
-  <header class="post-header">
-    <h1 class="post-header__title"><%= @post.title %></h1>
-    <time class="post-header__date" datetime="<%= @post.published_at&.iso8601 %>">
-      <%= @post.published_at&.strftime("%d de %B de %Y") %>
-    </time>
-  </header>
+<div class="layout-grid" data-controller="toc">
+  <div></div>
 
-  <div class="post-content">
-    <%= raw @post.body_html %>
-  </div>
-</article>
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-header__title"><%= @post.title %></h1>
+      <time class="post-header__date" datetime="<%= @post.published_at&.iso8601 %>">
+        <%= @post.published_at ? l(@post.published_at.to_date, format: :long) : "" %>
+      </time>
+    </header>
 
-<%= link_to "← Voltar", root_path, class: "back-link" %>
+    <div class="post-content" data-toc-target="content">
+      <%= raw @post.body_html %>
+    </div>
+
+    <%= link_to "← Voltar", root_path, class: "back-link" %>
+  </article>
+
+  <aside class="page-aside">
+    <%# O toc_controller preenche a lista com os h2 do post e mostra o bloco. %>
+    <div data-toc-target="nav" hidden>
+      <div class="page-aside__title">Nesta página</div>
+      <div data-toc-target="list"></div>
+      <div class="page-aside__divider"></div>
+    </div>
+    <a href="#" class="page-aside__top" data-action="toc#scrollTop">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
+      Voltar ao topo
+    </a>
+  </aside>
+</div>

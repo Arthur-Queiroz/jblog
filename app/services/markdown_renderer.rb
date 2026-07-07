@@ -4,7 +4,8 @@ class MarkdownRenderer
   # Allowlist do Rails mais as tags que o GFM gera (tabelas). Tudo fora disso é removido.
   # "class" é necessário para os tokens do rouge (.highlight .k etc., ver application.css).
   ALLOWED_TAGS = (Rails::HTML5::SafeListSanitizer.allowed_tags + %w[table thead tbody tr td th]).freeze
-  ALLOWED_ATTRIBUTES = (Rails::HTML5::SafeListSanitizer.allowed_attributes + %w[class]).freeze
+  # "id" é necessário para as âncoras dos headings (sumário "Nesta página").
+  ALLOWED_ATTRIBUTES = (Rails::HTML5::SafeListSanitizer.allowed_attributes + %w[class id]).freeze
 
   def self.render(markdown)
     # syntax_highlighter: nil desliga o syntect embutido do commonmarker, que gera
@@ -21,7 +22,8 @@ class MarkdownRenderer
       # github_pre_lang: false gera <pre><code class="language-x">, o formato que
       # highlight_code_blocks espera.
       render: { hardbreaks: false, unsafe: true, github_pre_lang: false },
-      extension: { table: true, strikethrough: true, autolink: true, tagfilter: true },
+      # header_ids gera <h2 id="..."> — as âncoras que o sumário "Nesta página" usa.
+      extension: { table: true, strikethrough: true, autolink: true, tagfilter: true, header_ids: "" },
       commonmark: { em: [ "*", "_" ], strong: [ "**", "__" ] }
     }
   end

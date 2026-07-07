@@ -1,24 +1,29 @@
 /* Tokens de COR com light-dark(claro, escuro). Valem para o default (:root) e
-   também para os temas claro/blue — INCLUSIVE quando renderizados como card dentro
+   também para os temas claro/escuro — INCLUSIVE quando renderizados como card dentro
    de uma página de paleta fixa (catppuccin etc.). Re-declarar aqui é o que evita o
-   card "Claro"/"Blue" HERDAR o --color-bg fixo do tema ancestral. O color-scheme
+   card "Claro"/"Escuro" HERDAR o --color-bg fixo do tema ancestral. O color-scheme
    (definido logo abaixo por [data-theme]) decide qual lado do light-dark() vale. */
 :root,
 [data-theme="light"],
+[data-theme="dark"],
 [data-theme="blue"] {
-  --color-bg: light-dark(#fafafa, #0f172a);
-  --color-surface: light-dark(#ffffff, #1e293b);
-  --color-text: light-dark(#1a1a1a, #f1f5f9);
-  --color-text-muted: light-dark(#6b7280, #94a3b8);
-  --color-border: light-dark(#e5e7eb, #334155);
-  --color-link: light-dark(#2563eb, #60a5fa);
-  --color-link-hover: light-dark(#1d4ed8, #93c5fd);
-  --color-code-bg: light-dark(#f3f4f6, #1e293b);
-  --color-code-text: light-dark(#dc2626, #f87171);
-  --color-accent: #2563eb;
+  /* Paleta do redesign: tons quentes de papel/carvão (claro #faf7f0, escuro #151310). */
+  --color-bg: light-dark(#faf7f0, #151310);
+  --color-surface: light-dark(#f2ede2, #1c1a16);
+  --color-text: light-dark(#1c1a16, #eee8da);
+  --color-text-muted: light-dark(#7a7264, #9a9284);
+  --color-border: light-dark(#e4ddcd, #302c25);
+  --color-link: light-dark(#3868ab, #7fa8d9);
+  --color-link-hover: light-dark(#2c5590, #a8c4e8);
+  --color-code-bg: light-dark(#f2ede2, #1c1a16);
+  --color-code-text: light-dark(#b3413f, #e08f8d);
+  --color-accent: light-dark(#3868ab, #7fa8d9);
+  /* Badge de data (home/destaques) — no escuro é um tom acima da superfície. */
+  --color-badge-bg: light-dark(#f2ede2, #38332b);
+  --color-badge-text: light-dark(#1c1a16, #eee8da);
   /* Texto sobre superfícies coloridas (botões). Fica como token porque em algumas
      paletas o accent/danger são cores claras e exigem texto escuro por cima. */
-  --color-on-accent: #ffffff;
+  --color-on-accent: light-dark(#ffffff, #151310);
   --color-on-danger: #ffffff;
   --color-success: #059669;
   --color-success-bg: light-dark(#ecfdf5, #064e3b);
@@ -26,7 +31,7 @@
   --color-danger: #dc2626;
   --color-danger-bg: light-dark(#fef2f2, #7f1d1d);
   --color-danger-border: light-dark(#fecaca, #991b1b);
-  --color-header-bg: light-dark(rgba(250, 250, 250, 0.85), rgba(15, 23, 42, 0.85));
+  --color-header-bg: light-dark(rgba(250, 247, 240, 0.85), rgba(21, 19, 16, 0.85));
   --shadow-card: light-dark(0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.2)),
                  light-dark(0 4px 12px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.15));
 
@@ -50,8 +55,12 @@
 :root {
   color-scheme: light dark;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  /* Tipografia do redesign: Bitter nos títulos, Lora no corpo, JetBrains Mono
+     em código e badges. Sans fica para UI utilitária (sumário, formulários, admin). */
+  --font-display: "Bitter", Georgia, "Times New Roman", serif;
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Monaco, Consolas, "Courier New", monospace;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -61,7 +70,9 @@
   --space-2xl: 3rem;
   --space-3xl: 4rem;
 
-  --max-width: 48rem;
+  /* Página larga com coluna de leitura de 720px (grade da home e do post). */
+  --max-width-page: 1280px;
+  --max-width-content: 720px;
   --radius: 0.375rem;
   --radius-lg: 0.625rem;
 }
@@ -69,8 +80,8 @@
 /* ============================================================================
    TEMAS
 
-   - claro/blue: vêm do :root via light-dark() (blue = o lado escuro, navy). Sem
-     [data-theme] o site segue o SO; as duas linhas abaixo só FORÇAM um dos dois.
+   - claro/escuro: vêm do :root via light-dark() (a paleta quente do redesign). Sem
+     [data-theme] o site segue o SO; as linhas abaixo só FORÇAM um dos dois lados.
    - paletas fixas (preto/catppuccin/gruvbox/kanagawa): cada bloco [data-theme] reescreve
      os tokens --color-*. O resto do CSS usa só esses tokens, então herda de graça.
 
@@ -78,11 +89,13 @@
      1. copie um bloco [data-theme="x"] abaixo e troque as cores;
      2. ponha `color-scheme: dark` (ou light) — controla os controles nativos do
         navegador e o syntax highlight (que usa light-dark);
-     3. adicione uma <option> no <select> de tema (app/views/layouts/application.html.erb).
+     3. adicione uma entrada em THEMES (app/controllers/settings_controller.rb).
    Os tons *-bg/*-border/header-bg são derivados com color-mix() para não repetir cor.
    ============================================================================ */
 [data-theme="light"] { color-scheme: light; }   /* lado claro do :root */
-[data-theme="blue"] { color-scheme: dark; }      /* "blue" = lado escuro (navy) do :root */
+[data-theme="dark"],
+[data-theme="blue"] { color-scheme: dark; }      /* lado escuro do :root ("blue" é alias
+                                                    do antigo tema salvo em localStorage) */
 
 /* Preto (OLED) — o "dark de verdade", fundo #000 */
 [data-theme="black"] {
@@ -116,6 +129,8 @@
   --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
   --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
   --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
+  --color-badge-text: var(--color-text);
 }
 
 /* Catppuccin (Mocha) */
@@ -152,6 +167,8 @@
   --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
   --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
   --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
+  --color-badge-text: var(--color-text);
 }
 
 /* Gruvbox (dark) */
@@ -187,6 +204,8 @@
   --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
   --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
   --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
+  --color-badge-text: var(--color-text);
 }
 
 /* Kanagawa (Wave) */
@@ -222,6 +241,8 @@
   --color-danger-bg: color-mix(in srgb, var(--color-danger) 15%, var(--color-bg));
   --color-danger-border: color-mix(in srgb, var(--color-danger) 35%, var(--color-bg));
   --color-header-bg: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  --color-badge-bg: color-mix(in srgb, var(--color-text) 14%, var(--color-bg));
+  --color-badge-text: var(--color-text);
 }
 
 * {
@@ -237,12 +258,16 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 1rem;
   line-height: 1.7;
   color: var(--color-text);
   background-color: var(--color-bg);
   min-height: 100vh;
+}
+
+::selection {
+  background: rgba(120, 150, 200, 0.35);
 }
 
 /* Acessibilidade: anel de foco visível para navegação por teclado. */
@@ -252,62 +277,83 @@ body {
   border-radius: var(--radius);
 }
 
-.container {
-  max-width: var(--max-width);
+/* Wrapper de página (1280px). A coluna de leitura de 720px vem da .layout-grid
+   ou da .content-narrow, conforme a página. */
+.page {
+  max-width: var(--max-width-page);
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 56px 44px 100px;
+}
+
+.content-narrow {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+/* Grade da home e do post: coluna vazia | conteúdo (720px) | sumário lateral. */
+.layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--max-width-content)) minmax(0, 1fr);
+  column-gap: 48px;
+  align-items: start;
 }
 
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: var(--color-header-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--space-md) 0;
-  margin-bottom: var(--space-2xl);
-}
-
-.site-header .container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  max-width: var(--max-width-page);
+  margin: 0 auto;
+  padding: 22px 44px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .site-header__logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  /* Cor de marca = accent do tema (mesma cor do botão "Entrar"), destaca o logo. */
-  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text);
   text-decoration: none;
-  letter-spacing: -0.025em;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
 .site-header__nav {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  font-size: 1rem;
 }
 
-.site-header__nav a {
-  color: var(--color-text-muted);
+.site-header__link {
+  color: var(--color-text);
   text-decoration: none;
-  font-size: 0.9375rem;
   transition: color 0.15s ease;
 }
 
-.site-header__nav a:hover {
+.site-header__link:hover {
+  color: var(--color-link);
+}
+
+.site-header__icon-link {
   color: var(--color-text);
+  display: flex;
+  transition: color 0.15s ease;
+}
+
+.site-header__icon-link:hover {
+  color: var(--color-link);
 }
 
 .site-header__logout {
   background: none;
   border: none;
   color: var(--color-text-muted);
-  font-family: var(--font-sans);
-  font-size: 0.9375rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
   cursor: pointer;
   padding: 0;
   transition: color 0.15s ease;
@@ -315,6 +361,71 @@ body {
 
 .site-header__logout:hover {
   color: var(--color-danger);
+}
+
+/* Busca no header: um form de verdade com cara de campo de atalho (Ctrl K). */
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  min-width: 280px;
+  transition: border-color 0.15s ease;
+}
+
+.header-search:focus-within {
+  border-color: var(--color-accent);
+}
+
+.header-search__icon {
+  flex-shrink: 0;
+}
+
+.header-search__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.header-search__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.header-search__input:focus,
+.header-search__input:focus-visible {
+  outline: none;
+}
+
+.header-search__kbd {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 2px 7px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--color-link);
 }
 
 /* Engrenagem no header → tela de configurações. */
@@ -455,9 +566,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   line-height: 1.3;
-  letter-spacing: -0.025em;
   text-wrap: balance;
   margin-top: var(--space-xl);
   margin-bottom: var(--space-md);
@@ -491,55 +602,211 @@ li {
   margin-bottom: var(--space-xs);
 }
 
-.post-list {
-  list-style: none;
-  padding: 0;
+/* ===== Home ===== */
+.home-title {
+  font-size: 2.875rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 40px;
 }
 
-.post-list__item {
-  padding: var(--space-lg) 0;
+/* Caixa "Destaques": <details> nativo — o [open] troca o rótulo Mostrar/Esconder
+   sem JS. */
+.destaques {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  margin-bottom: 48px;
+}
+
+.destaques__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 20px 28px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.destaques__header::-webkit-details-marker {
+  display: none;
+}
+
+.destaques[open] .destaques__header {
   border-bottom: 1px solid var(--color-border);
 }
 
-.post-list__item:last-child {
-  border-bottom: none;
+.destaques__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.625rem;
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 6px;
 }
 
-.post-list__title {
-  font-size: 1.25rem;
-  margin: 0 0 var(--space-xs);
-}
-
-.post-list__title a {
-  color: var(--color-text);
-}
-
-.post-list__title a:hover {
-  color: var(--color-link);
-}
-
-.post-list__date {
+.destaques__toggle {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 5px 16px;
   font-size: 0.875rem;
+}
+
+.destaques__toggle-hide {
+  display: none;
+}
+
+.destaques[open] .destaques__toggle-show {
+  display: none;
+}
+
+.destaques[open] .destaques__toggle-hide {
+  display: inline;
+}
+
+.destaques__list {
+  list-style: none;
+  margin: 0;
+  padding: 20px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.destaques__item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+}
+
+.destaques__item::before {
+  content: "•";
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.destaques__dash {
   color: var(--color-text-muted);
 }
 
+.destaques__link {
+  color: var(--color-link);
+  text-decoration: underline;
+  font-size: 1.25rem;
+}
+
+.date-badge {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.3px;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background-color: var(--color-badge-bg);
+  color: var(--color-badge-text);
+  white-space: nowrap;
+}
+
+.month-group {
+  margin-bottom: 40px;
+}
+
+.month-group__title {
+  font-size: 1.875rem;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 22px;
+}
+
+.month-group__list {
+  list-style: disc;
+  padding-left: 24px;
+  margin: 0;
+}
+
+.month-group__item {
+  margin-bottom: 12px;
+}
+
+.month-group__link {
+  color: var(--color-link);
+  text-decoration: underline;
+  font-size: 1.1875rem;
+}
+
+/* Sumário lateral ("Nesta página"), na terceira coluna da grade. */
+.page-aside {
+  width: 200px;
+  position: sticky;
+  top: 32px;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+}
+
+.page-aside__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 26px;
+}
+
+.page-aside__link {
+  display: block;
+  font-size: 0.96875rem;
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 8px 0;
+}
+
+.page-aside__link:hover {
+  color: var(--color-link);
+}
+
+.page-aside__divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 26px 0 20px;
+}
+
+.page-aside__top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.page-aside__top:hover {
+  color: var(--color-text);
+}
+
+/* ===== Post ===== */
 .post-header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 .post-header__title {
-  font-size: 2.25rem;
-  margin: 0 0 var(--space-sm);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 12px;
 }
 
 .post-header__date {
   font-size: 0.9375rem;
   color: var(--color-text-muted);
+  font-style: italic;
 }
 
 .post-content {
-  font-size: 1.0625rem;
-  line-height: 1.8;
+  font-size: 1.125rem;
+  line-height: 1.85;
 }
 
 .post-content p {
@@ -547,6 +814,7 @@ li {
 }
 
 .post-content h2 {
+  font-size: 1.6875rem;
   margin-top: var(--space-2xl);
 }
 
@@ -623,13 +891,13 @@ li {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  margin-top: var(--space-xl);
-  font-size: 0.9375rem;
-  color: var(--color-text-muted);
+  margin-top: var(--space-2xl);
+  font-size: 1rem;
+  color: var(--color-link);
 }
 
 .back-link:hover {
-  color: var(--color-link);
+  color: var(--color-link-hover);
 }
 
 .search-form {
@@ -975,8 +1243,9 @@ li {
 }
 
 .site-footer {
-  margin-top: var(--space-3xl);
-  padding: var(--space-xl) 0;
+  max-width: var(--max-width-page);
+  margin: 0 auto;
+  padding: 20px 44px;
   border-top: 1px solid var(--color-border);
   text-align: center;
   font-size: 0.875rem;
@@ -1024,14 +1293,48 @@ li {
   padding: 0;
 }
 
+/* Sem espaço para as colunas laterais: some o sumário, conteúdo vira coluna única. */
+@media (max-width: 1080px) {
+  .layout-grid {
+    display: block;
+  }
+
+  .page-aside {
+    display: none;
+  }
+
+  .header-search {
+    min-width: 0;
+  }
+
+  .header-search__kbd {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
-  .site-header .container {
+  .site-header {
     flex-direction: column;
     gap: var(--space-md);
+    padding: 16px 20px;
+  }
+
+  .page {
+    padding: 32px 20px 64px;
+  }
+
+  .home-title {
+    font-size: 2.25rem;
   }
 
   .post-header__title {
-    font-size: 1.75rem;
+    font-size: 2rem;
+  }
+
+  .destaques__header,
+  .destaques__list {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .admin-header {
