@@ -1,29 +1,31 @@
 <% content_for(:title, "Busca") %>
 
-<h1>Buscar</h1>
+<div class="content-narrow">
+  <h1>Buscar</h1>
 
-<%= form_with url: search_path, method: :get, local: true, class: "search-form" do |form| %>
-  <%= form.search_field :q, value: @query, placeholder: "Buscar posts...", class: "search-form__input" %>
-  <%= form.submit "Buscar", class: "search-form__button" %>
-<% end %>
-
-<% if @query.present? %>
-  <h2>Resultados para "<%= @query %>"</h2>
-
-  <% if @search_results.empty? %>
-    <p class="empty-state">Nenhum resultado encontrado.</p>
-  <% else %>
-    <ul class="search-results">
-      <% @search_results.each do |post| %>
-        <li class="search-results__item">
-          <h3 class="search-results__title">
-            <%= link_to post.title, post_path(post) %>
-          </h3>
-          <time class="search-results__date" datetime="<%= post.published_at&.iso8601 %>">
-            <%= post.published_at&.strftime("%d de %B de %Y") %>
-          </time>
-        </li>
-      <% end %>
-    </ul>
+  <%= form_with url: search_path, method: :get, local: true, class: "search-form" do |form| %>
+    <%= form.search_field :q, value: @query, placeholder: "Buscar posts...", class: "search-form__input" %>
+    <%= form.submit "Buscar", class: "search-form__button" %>
   <% end %>
-<% end %>
+
+  <% if @query.present? %>
+    <h2>Resultados para "<%= @query %>"</h2>
+
+    <% if @search_results.empty? %>
+      <p class="empty-state">Nenhum resultado encontrado.</p>
+    <% else %>
+      <ul class="search-results">
+        <% @search_results.each do |post| %>
+          <li class="search-results__item">
+            <h3 class="search-results__title">
+              <%= link_to post.title, post_path(post) %>
+            </h3>
+            <time class="search-results__date" datetime="<%= post.published_at&.iso8601 %>">
+              <%= post.published_at ? l(post.published_at.to_date, format: :long) : "" %>
+            </time>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</div>

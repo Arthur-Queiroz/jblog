@@ -4,14 +4,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "index shows published posts" do
     get root_path
     assert_response :success
-    assert_select "h2", text: "Post publicado"
+    assert_select "a.month-group__link", text: "Post publicado"
   end
 
   test "index does not show draft posts" do
     get root_path
     assert_response :success
-    assert_select "h2", { count: 1 }
-    assert_select "h2", text: "Rascunho", count: 0
+    assert_select "a.month-group__link", text: "Rascunho", count: 0
+    assert_select "a.destaques__link", text: "Rascunho", count: 0
   end
 
   test "show displays a published post" do

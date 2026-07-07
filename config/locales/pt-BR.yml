@@ -1,0 +1,62 @@
+# Locale mínimo para as datas do blog em português ("6 de julho de 2026").
+# Não é a tradução completa do Rails — só o que as views usam via `l(...)`.
+pt-BR:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      long: "%-d de %B de %Y"
+      # Título dos grupos de posts na home ("2026 - Julho" após capitalize).
+      month_group: "%Y - %B"
+    month_names:
+      - ~
+      - janeiro
+      - fevereiro
+      - março
+      - abril
+      - maio
+      - junho
+      - julho
+      - agosto
+      - setembro
+      - outubro
+      - novembro
+      - dezembro
+    abbr_month_names:
+      - ~
+      - jan
+      - fev
+      - mar
+      - abr
+      - mai
+      - jun
+      - jul
+      - ago
+      - set
+      - out
+      - nov
+      - dez
+    day_names: [domingo, segunda-feira, terça-feira, quarta-feira, quinta-feira, sexta-feira, sábado]
+    abbr_day_names: [dom, seg, ter, qua, qui, sex, sáb]
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      long: "%-d de %B de %Y"
+  # Mensagens que as validações dos modelos realmente usam (presence/uniqueness
+  # do Post e as do has_secure_password no User).
+  errors:
+    messages:
+      blank: "não pode ficar em branco"
+      taken: "já está em uso"
+      invalid: "não é válido"
+      confirmation: "não confere com %{attribute}"
+      too_long:
+        one: "é longo demais (máximo: 1 caractere)"
+        other: "é longo demais (máximo: %{count} caracteres)"
+  activerecord:
+    attributes:
+      post:
+        title: "Título"
+        slug: "Slug"
+        body_markdown: "Conteúdo (Markdown)"
+        published: "Publicado"
+        published_at: "Publicado em"

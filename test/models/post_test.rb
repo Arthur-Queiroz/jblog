@@ -9,13 +9,13 @@ class PostTest < ActiveSupport::TestCase
   test "requires title" do
     post = Post.new(body_markdown: "Conteúdo")
     assert_not post.valid?
-    assert_includes post.errors[:title], "can't be blank"
+    assert_includes post.errors[:title], "não pode ficar em branco"
   end
 
   test "requires body_markdown" do
     post = Post.new(title: "Teste")
     assert_not post.valid?
-    assert_includes post.errors[:body_markdown], "can't be blank"
+    assert_includes post.errors[:body_markdown], "não pode ficar em branco"
   end
 
   test "generates slug from title when blank" do
@@ -34,7 +34,7 @@ class PostTest < ActiveSupport::TestCase
     Post.create!(title: "Original", slug: "original", body_markdown: "Conteúdo")
     duplicate = Post.new(title: "Outro", slug: "original", body_markdown: "Conteúdo")
     assert_not duplicate.valid?
-    assert_includes duplicate.errors[:slug], "has already been taken"
+    assert_includes duplicate.errors[:slug], "já está em uso"
   end
 
   test "renders markdown to html on save" do
