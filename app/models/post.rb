@@ -1,7 +1,7 @@
 class Post < ApplicationRecord
   include PgSearch::Model
 
-  before_validation :generate_slug, if: -> { slug.blank? }
+  before_validation :normalize_slug
   before_save :render_markdown
 
   validates :title, presence: true
@@ -35,8 +35,8 @@ class Post < ApplicationRecord
 
   private
 
-  def generate_slug
-    self.slug = title&.parameterize
+  def normalize_slug
+    self.slug = (slug.presence || title)&.parameterize
   end
 
   # Mantém body_html sempre sincronizado com body_markdown.
