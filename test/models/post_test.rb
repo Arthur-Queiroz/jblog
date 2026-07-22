@@ -24,10 +24,9 @@ class PostTest < ActiveSupport::TestCase
     assert_equal "meu-post-legal", post.slug
   end
 
-  test "does not overwrite existing slug" do
-    post = Post.new(title: "Meu Post", slug: "slug-custom", body_markdown: "Conteúdo")
-    post.valid?
-    assert_equal "slug-custom", post.slug
+  test "normalizes a custom slug when saved" do
+    post = Post.create!(title: "Meu Post", slug: "Slug customizado!", body_markdown: "Conteúdo")
+    assert_equal "slug-customizado", post.slug
   end
 
   test "slug must be unique" do
